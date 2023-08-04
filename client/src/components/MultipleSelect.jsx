@@ -32,6 +32,7 @@ const MultipleSelect = (props) => {
         overrideStrings={{
           ...SETTINGS,
           selectSomeItems: props?.label,
+          allItemsAreSelected:`All ${props?.mainLabel} are selected.`
         }}
         value={selected}
         shouldToggleOnHover={true}

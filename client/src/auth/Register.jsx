@@ -11,7 +11,7 @@ import {
 import InputBox from "../components/InputBox";
 import CustomButton from "../components/CustomButton";
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (checkLoginFromLogin()) {
@@ -110,16 +110,11 @@ const Login = () => {
         </div>
         <div className="mt-5" id="error" style={{ display: "none" }}></div>
         <div className="mt-5">
-          <CustomButton
-            label="Login"
-            onClick={() => {
-              console.log("ui");
-            }}
-          />
+          <CustomButton />
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Register;

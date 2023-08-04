@@ -27,7 +27,7 @@ export default function Home() {
         />
       </div>
       <div className="flex flex-col justify-center items-center md:w-1/2 w-full">
-        <div className="w-1/2 backdrop-blur-3xl rounded-lg bg-white/30 p-10">
+        <div className="w-1/2 backdrop-blur-3xl rounded-3xl bg-white/30 p-10">
           <h1 className="text-center text-3xl font-extrabold leading-tight tracking-tight mb-8">
             Choose{" "}
             <span className="leading-tighter tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-rose-700 to-pink-600">
@@ -36,7 +36,7 @@ export default function Home() {
             Start
           </h1>
           <MultipleSelect mainLabel={"tenses"} label="Ex. PASSE_SIMPLE" />
-          <MultipleSelect mainLabel={"person"} label="Ex. VOUS" />
+          <MultipleSelect mainLabel={"subjects"} label="Ex. VOUS" />
           <MultipleSelect mainLabel={"verbs"} label="Ex. ALLER" />
         </div>
       </div>
