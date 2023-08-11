@@ -12,6 +12,11 @@ const UserData = React.createContext({
     isLoggedIn: false,
   },
   setSession: () => {},
+  options: {
+    tenses: [],
+    subjects: [],
+    verbs: [],
+  },
 });
 
 export default UserData;

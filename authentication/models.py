@@ -25,11 +25,8 @@ class CustomUsers(AbstractUser):
     email = models.EmailField(max_length=256, unique=True)
     username = models.CharField(max_length=256, null=True, blank=True)
     fullName = models.CharField(max_length=256)
-    countryCode = models.CharField(max_length=5)
-    phoneNumber = models.CharField(max_length=20)
     password = models.CharField(max_length=2048)
-    companyName = models.CharField(max_length=256, null=True, blank=True)
-    companyURL = models.URLField(null=True, blank=True)
+    points = models.PositiveBigIntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = "email"

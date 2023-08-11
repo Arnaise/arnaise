@@ -18,7 +18,18 @@ const Register = () => {
       navigate("/");
     }
   }, []);
-  const login = async (e) => {
+
+  const getErrorMessage = (message) => {
+    let toReturn = "";
+    for (const key in message) {
+      toReturn += `[${capitalizeFirstLetter(key.split("_").join(" "))}]: ${
+        message[key][0]
+      }\n`;
+    }
+    return toReturn;
+  };
+
+  const register = async (e) => {
     e.target.style.pointerEvents = "none";
     e.target.innerHTML =
       '<div className="spinner-border custom-spin" role="status"><span className="visually-hidden">Loading...</span></div>';
@@ -29,13 +40,16 @@ const Register = () => {
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(payload.email)
     ) {
       if (payload.password !== "") {
-        await axios
-          .post(CONSTANT.server + "validate/", payload)
-          .then((responce) => {
-            if (responce.status === 200) {
+        if (payload.fullName !== "") {
+          await axios
+            .post(CONSTANT.server + "authentication/user", {
+              ...payload,
+            })
+            .then((responce) => {
               let res = responce.data;
               if (res.message) {
-                setMessage(res.message, "red-500");
+                setMessage(getErrorMessage(res.message), "red-500");
+                // setMessage(res.message, "red-500");
               } else {
                 sessionStorage.setItem(
                   "loggedin",
@@ -45,22 +59,25 @@ const Register = () => {
                 );
                 navigate("/");
               }
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          setMessage("Please enter full name.", "red-500");
+        }
       } else {
-        setMessage("Please Enter Password", "red-500");
+        setMessage("Please enter password.", "red-500");
       }
     } else {
-      setMessage("Please Enter Valid Email", "red-500");
+      setMessage("Please enter valid email.", "red-500");
     }
     e.target.style.pointerEvents = "unset";
-    e.target.innerHTML = "Log In";
+    e.target.innerHTML = "Register";
   };
 
   const init__payload = {
+    fullName: "",
     email: "",
     password: "",
   };
@@ -80,12 +97,19 @@ const Register = () => {
             <img src={SITE_DETAILS.logo} className="invert-[100] w-[8rem]" />
           </Link>
         </div>
-        <h1 className="text-start text-5xl font-extrabold leading-tight tracking-tight">
-          <span className="leading-tighter tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-rose-700 to-pink-600">
-            Welcome Back.
+        <h1 className="text-center text-5xl font-extrabold leading-tight tracking-tight">
+          <span className="leading-tighter tracking-tighter bg-clip-text text-black">
+            Register Yourself
           </span>
         </h1>
         <div className="flex flex-col space-y-3 mt-5">
+          <InputBox
+            type="text"
+            name="fullName"
+            value={payload.fullName}
+            onChange={changePayload}
+            placeholder="Enter your full name."
+          />
           <InputBox
             type="email"
             name="email"
@@ -102,15 +126,15 @@ const Register = () => {
           />
         </div>
         <div className="mt-5">
-          Don't have account?{" "}
-          <Link className="text-blue-500 hover:text-blue-400" to={"/register"}>
-            Create one
+          Already have an account?{" "}
+          <Link className="text-blue-500 hover:text-blue-400" to={"/login"}>
+            Login now
           </Link>
           .
         </div>
         <div className="mt-5" id="error" style={{ display: "none" }}></div>
-        <div className="mt-5">
-          <CustomButton />
+        <div className="mt-5 text-center">
+          <CustomButton label="Register" onClick={register} />
         </div>
       </div>
     </div>

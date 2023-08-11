@@ -3,100 +3,53 @@ from . import models
 from authentication.serializers import ViewUserSerializer
 
 
-class ActionSerializer(serializers.ModelSerializer):
+class TensesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Action
+        model = models.Tenses
         fields = "__all__"
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class SubjectsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Category
+        model = models.Subjects
         fields = "__all__"
 
 
-class MeasurementSerializer(serializers.ModelSerializer):
+class VerbsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Measurement
+        model = models.Verbs
         fields = "__all__"
 
 
-class DeliverySerializer(serializers.ModelSerializer):
+class LogsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Delivery
+        model = models.Logs
         fields = "__all__"
 
 
-class PaymentSerializer(serializers.ModelSerializer):
+class LogsTensesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Payment
-        fields = "__all__"
+        model = models.Tenses
+        fields = ["label", "points"]
 
 
-class OriginSerializer(serializers.ModelSerializer):
+class LogsSubjectsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Origin
-        fields = "__all__"
+        model = models.Subjects
+        fields = ["label"]
 
 
-class CurrencySerializer(serializers.ModelSerializer):
+class LogsVerbsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Currency
-        fields = "__all__"
+        model = models.Verbs
+        fields = ["value", "isRegular"]
 
 
-class ContractSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Contract
-        fields = "__all__"
-
-
-class ListingDurationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.ListingDuration
-        fields = "__all__"
-
-
-class ProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Product
-        fields = "__all__"
-
-
-class ViewProductSerializer(serializers.ModelSerializer):
-    by = ViewUserSerializer()
-    action = ActionSerializer()
-    category = CategorySerializer()
-    measurement = MeasurementSerializer()
-    currency = CurrencySerializer()
-    payment = PaymentSerializer()
-    delivery = DeliverySerializer()
-    contract = ContractSerializer()
-    origin = OriginSerializer()
-    listingDuration = ListingDurationSerializer()
+class ViewLogsSerializer(serializers.ModelSerializer):
+    tense = LogsTensesSerializer()
+    subject = LogsSubjectsSerializer()
+    verb = LogsVerbsSerializer()
 
     class Meta:
-        model = models.Product
-        fields = "__all__"
-
-
-class ProductInteractionsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.ProductInteractions
-        fields = "__all__"
-
-class HomeProductInteractionsSerializer(serializers.ModelSerializer):
-    action = ActionSerializer()
-    class Meta:
-        model = models.ProductInteractions
-        fields = "__all__"
-
-
-class ViewProductInteractionsSerializer(serializers.ModelSerializer):
-    product = ViewProductSerializer()
-    user = ViewUserSerializer()
-    action = ActionSerializer()
-
-    class Meta:
-        model = models.ProductInteractions
+        model = models.Logs
         fields = "__all__"

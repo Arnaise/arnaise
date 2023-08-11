@@ -31,12 +31,14 @@ export default function CustomButton(props) {
         setIsLoading((old) => {
           return !old;
         });
-        props?.onClick();
+        props?.onClick(e);
         setIsLoading((old) => {
           return !old;
         });
       }}
-      className={`${isLoading && "pointer-events-none opacity-70"} capitalize px-10 py-2 rounded-lg hover:opacity-60 transition-all duration-300 ease-in-out bg-gradient-to-r from-rose-700 to-pink-600 text-white`}
+      className={`${
+        isLoading || (props?.disabled && "pointer-events-none opacity-70")
+      } capitalize px-10 py-2 rounded-lg hover:opacity-60 transition-all duration-300 ease-in-out bg-gradient-to-r from-rose-700 to-pink-600 text-white`}
     >
       {isLoading ? <LOADING_HTML /> : props?.label}
     </button>

@@ -4,6 +4,8 @@ import Login from "./auth/Login";
 import Home from "./views/Home";
 import Layout from "./layout/Layout";
 import TakeMeToAdmin from "./components/TakeMeToAdmin";
+import Register from "./auth/Register";
+import Records from "./views/Records";
 
 function App() {
   return (
@@ -18,8 +20,17 @@ function App() {
               </Layout>
             }
           />
+          <Route
+            path="/records"
+            element={
+              <Layout>
+                <Records />
+              </Layout>
+            }
+          />
           <Route path="/admin" element={<TakeMeToAdmin />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </Router>
     </div>

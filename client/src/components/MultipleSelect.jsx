@@ -23,20 +23,22 @@ const MultipleSelect = (props) => {
   const [selected, setSelected] = useState([]);
 
   return (
-    <div className="mt-8">
+    <div className="mt-3">
       <span className="capitalize text-base font-semibold text-slate-500 tracking-tighter leading-relaxed">
         {props?.mainLabel}
       </span>
       <MultiSelect
-        options={options}
+        options={props?.options ?? options}
         overrideStrings={{
           ...SETTINGS,
           selectSomeItems: props?.label,
-          allItemsAreSelected:`All ${props?.mainLabel} are selected.`
+          allItemsAreSelected: `All ${props?.mainLabel} are selected.`,
         }}
-        value={selected}
-        shouldToggleOnHover={true}
-        onChange={setSelected}
+        value={props?.value}
+        shouldToggleOnHover={false}
+        onChange={(val) => {
+          props?.onChange(props?.name, val);
+        }}
         labelledBy={props?.label}
         className="__MULTI_SELECT__"
       />

@@ -30,7 +30,7 @@ const Login = () => {
     ) {
       if (payload.password !== "") {
         await axios
-          .post(CONSTANT.server + "validate/", payload)
+          .post(CONSTANT.server + "authentication/validate", payload)
           .then((responce) => {
             if (responce.status === 200) {
               let res = responce.data;
@@ -80,9 +80,9 @@ const Login = () => {
             <img src={SITE_DETAILS.logo} className="invert-[100] w-[8rem]" />
           </Link>
         </div>
-        <h1 className="text-start text-5xl font-extrabold leading-tight tracking-tight">
-          <span className="leading-tighter tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-rose-700 to-pink-600">
-            Welcome Back.
+        <h1 className="text-center text-5xl font-extrabold leading-tight tracking-tight">
+          <span className="leading-tighter tracking-tighter bg-clip-text text-black">
+            Welcome Back
           </span>
         </h1>
         <div className="flex flex-col space-y-3 mt-5">
@@ -109,13 +109,8 @@ const Login = () => {
           .
         </div>
         <div className="mt-5" id="error" style={{ display: "none" }}></div>
-        <div className="mt-5">
-          <CustomButton
-            label="Login"
-            onClick={() => {
-              console.log("ui");
-            }}
-          />
+        <div className="mt-5 text-center">
+          <CustomButton label="Login" onClick={login} />
         </div>
       </div>
     </div>

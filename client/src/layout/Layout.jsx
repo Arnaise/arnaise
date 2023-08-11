@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import UserData from "../contexts/UserData";
 import Navbar from "../components/Navbar";
-import { checkLoginFromNonLogin } from "../CONSTANT";
+import { CONSTANT } from "../CONSTANT";
 import BackgroundBlur from "../components/BackgroundBlur";
+import { IconContext } from "react-icons";
+import axios from "axios";
 export default function Layout(props) {
   let navigate = useNavigate();
   // ------------------
@@ -29,9 +31,27 @@ export default function Layout(props) {
         isLoggedIn: true,
       });
     }
+    fetchOptions();
   }, []);
 
-  const value = { session, setSession };
+  const [options, setOptions] = useState({
+    tenses: [],
+    subjects: [],
+    verbs: [],
+  });
+
+  const fetchOptions = async () => {
+    await axios
+      .get(CONSTANT.server + "api/options")
+      .then((responce) => {
+        setOptions(responce.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const value = { session, setSession, options };
   // ------------------
   // SESSION - END
   // ------------------
@@ -44,13 +64,16 @@ export default function Layout(props) {
   return (
     <>
       <UserData.Provider value={value}>
-        <Navbar
-          isLoggedIn={session.isLoggedIn}
-          __init_session={__init_session}
-          setSession={setSession}
-        />
-        <BackgroundBlur />
-        <div className="mx-10 z-10">{props.children}</div>
+        <IconContext.Provider value={{className:"text-_accent_1_ hover:opacity-60 transition-all duration-300 ease-in-out"}}>
+          <Navbar
+            isLoggedIn={session.isLoggedIn}
+            __init_session={__init_session}
+            setSession={setSession}
+            session={session}
+          />
+          {/* <BackgroundBlur /> */}
+          <div className="mx-10">{props.children}</div>
+        </IconContext.Provider>
       </UserData.Provider>
     </>
   );

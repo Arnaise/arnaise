@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from . import models
 
+BASIC_ITEMS = ["email", "fullName", "points"]
+
 
 class CustomUserSerializer(serializers.ModelSerializer):
     """
@@ -11,15 +13,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.CustomUsers
-        fields = (
-            "email",
-            "fullName",
-            "countryCode",
-            "phoneNumber",
-            "password",
-            "companyName",
-            "companyURL",
-        )
+        fields = [*BASIC_ITEMS, "password"]
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
@@ -34,13 +28,4 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class ViewUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CustomUsers
-        fields = (
-            "id",
-            "email",
-            "fullName",
-            "countryCode",
-            "phoneNumber",
-            "companyName",
-            "companyURL",
-            "timestamp",
-        )
+        fields = ["id", *BASIC_ITEMS, "timestamp"]
