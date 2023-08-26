@@ -30,10 +30,11 @@ export default function Records() {
   const startIndex = page * JUMP;
   const endIndex = startIndex + JUMP;
   const currentData = data.slice(startIndex, endIndex);
+
   return (
-    <div className="mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
+    <div className="mt-10 md:mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
       <div className="mb-5 flex flex-col w-full">
-        <h1 className="text-center text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
+        <h1 className="text-center text-3xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
           Recent
           <span className="mx-2"></span>
           <span className="leading-tighter tracking-tighter text-_accent_1_">
@@ -42,7 +43,7 @@ export default function Records() {
         </h1>
       </div>
       <div className="flex flex-col justify-center items-center w-full">
-        <div className="w-2/3">
+        <div className="px-5 md:px-0 w-full md:w-2/3">
           <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -95,7 +96,7 @@ export default function Records() {
                         {one?.tense?.label}
                       </td>
                       <td className="px-6 py-4 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {one?.isCorrect ? `+${one?.tense?.points}` : "0"}
+                        {one?.isCorrect ? `+${one?.points}` : "0"}
                       </td>
                     </tr>
                   );

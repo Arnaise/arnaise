@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import CustomButton from "./CustomButton";
 import { TbHelpSquareRoundedFilled } from "react-icons/tb";
-import { getConjugation } from "french-verbs";
-import Lefff from "french-verbs-lefff/dist/conjugations.json";
 import { setMessage, resetMessage, CONSTANT } from "../CONSTANT";
 import axios from "axios";
+import { MdArrowBackIosNew } from "react-icons/md";
+import { getConjugationAnswer } from "../UTILS";
 
 const renderBadge = (value) => {
   if (!value) {
@@ -25,7 +25,7 @@ const LOADING_HTML = () => {
   return (
     <svg
       aria-hidden="true"
-      class="inline w-4 h-4 text-gray-500 animate-spin fill-white"
+      className="inline w-4 h-4 text-gray-500 animate-spin fill-black"
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -45,54 +45,53 @@ const LOADING_HTML = () => {
 export default function QuestionTab(props) {
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    if (props?.subject && props?.verb && props?.tense && props?.progress) {
+    if (props?.subject && props?.verb && props?.tense) {
       setReady(true);
     }
   }, []);
 
+  // Testing Start
+
   useEffect(() => {
-    if (props?.subject && props?.verb && props?.tense && props?.progress) {
-      let trueValue = getConjugation(
-        Lefff,
+    if (props?.subject && props?.verb && props?.tense) {
+      let trueValue = getConjugationAnswer(
         props?.verb?.value,
         props?.tense?.value,
         props?.subject?.value
       );
-      console.log(trueValue);
+      // console.log(trueValue);
+      if (!trueValue) {
+        props?.chooseRandomQuestion();
+      }
     }
   }, [props]);
+
+  // Testing End
 
   const checkAnswer = (e) => {
     e.preventDefault();
     setReady(false);
     resetMessage();
-    let trueValue = getConjugation(
-      Lefff,
+    let trueValue = getConjugationAnswer(
       props?.verb?.value,
       props?.tense?.value,
       props?.subject?.value
     );
+    let isCorrect = true;
     if (trueValue.toLowerCase() === answer.toLowerCase()) {
       addLog(trueValue, true);
       setMessage("Correct!", "green-500");
-      props.setPoints((old) => {
-        return old + parseInt(props?.tense?.points);
-      });
     } else {
+      isCorrect = false;
       addLog(trueValue, false);
       setMessage("Wrong!", "red-500");
     }
     setTimeout(() => {
       resetMessage();
-      setAnswer("");
-      if (props?.isLast) {
-        props?.setResult(true);
-        return;
-      } else {
+      if (isCorrect) {
+        setAnswer("");
         props?.setLoading(true);
-        props?.setIndex((last) => {
-          return last + 1;
-        });
+        props?.chooseRandomQuestion();
         props?.setLoading(false);
       }
       setReady(true);
@@ -111,7 +110,13 @@ export default function QuestionTab(props) {
           user: props?.userId,
         })
         .then((responce) => {
-          setOptions(responce.data);
+          let finalPoints = parseInt(props?.tense?.points);
+          if (props?.verb?.isRegular) {
+            finalPoints += 2;
+          } else {
+            finalPoints += 5;
+          }
+          props?.updatePoints(finalPoints);
         })
         .catch((error) => {
           console.log(error);
@@ -121,7 +126,13 @@ export default function QuestionTab(props) {
   const [answer, setAnswer] = useState("");
 
   return (
-    <div className="py-[4rem] px-[10rem] bg-white shadow-2xl rounded-lg">
+    <div className="relative py-[4rem] px-5 md:px-[10rem] bg-white shadow-2xl rounded-lg">
+      <div
+        onClick={props?.backToHome}
+        className="cursor-pointer absolute top-[10px] left-[10px] hover:bg-gray-200 rounded-full p-3"
+      >
+        <MdArrowBackIosNew className="text-black h-[25px] w-[25px]" />
+      </div>
       <div className="flex flex-row justify-evenly space-x-3 mb-10">
         <div className="flex flex-row space-x-2 justify-center items-center">
           <span className="text-gray-500">Verb:</span>{" "}
@@ -147,7 +158,8 @@ export default function QuestionTab(props) {
               <input
                 type="text"
                 className="border text-base rounded-lg w-full py-2 px-3 placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
-                placeholder={`Enter the correct form of the verb for ${props?.verb?.value}.`}
+                placeholder={`Enter the correct form.`}
+                // placeholder={`Enter the correct form of the verb for ${props?.verb?.value}.`}
                 value={answer}
                 onChange={(e) => {
                   setAnswer(e.target.value);
@@ -158,14 +170,14 @@ export default function QuestionTab(props) {
                   }
                 }}
               />
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer">
+              {/* <div className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer">
                 <TbHelpSquareRoundedFilled
                   size={"2rem"}
                   onClick={() => {
                     alert("help required");
                   }}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="">
@@ -178,7 +190,7 @@ export default function QuestionTab(props) {
         </div>
       </div>
 
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <div className="relative pt-1">
           <div className="flex mb-2 items-center justify-between">
             <div>
@@ -199,7 +211,7 @@ export default function QuestionTab(props) {
             ></div>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="text-center mt-10 text-2xl" id="error"></div>
     </div>
   );

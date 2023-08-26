@@ -1,66 +1,39 @@
 import React, { useEffect, useState } from "react";
 import QuestionTab from "../components/QuestionTab";
 import CustomButton from "../components/CustomButton";
+import { formatSelections, makeConjugationQuestions } from "../UTILS.js";
 
 export default function Assessment(props) {
-  const makeConjugationQuestions = (selection) => {
-    const questions = [];
-
-    selection.verbs.forEach((verb) => {
-      selection.subjects.forEach((subject) => {
-        selection.tenses.forEach((tense) => {
-          questions.push({
-            verb: verb,
-            subject: subject,
-            tense: tense,
-          });
-        });
-      });
-    });
-    let randomizedQuestions = questions.sort(() => Math.random() - 0.5);
-    return randomizedQuestions;
-  };
-
-  const formatSelections = () => {
-    return {
-      tenses: props?.selection.tenses,
-      verbs: [
-        ...props?.selection.regularVerbs,
-        ...props?.selection.irregularVerbs,
-      ],
-      subjects: props?.subjects,
-    };
-  };
-
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [result, setResult] = useState(false);
   const [index, setIndex] = useState(0);
-  const [points, setPoints] = useState(0);
 
   useEffect(() => {
     if (props?.selection) {
-      setQuestions(makeConjugationQuestions(formatSelections()));
+      setQuestions(
+        makeConjugationQuestions(
+          formatSelections(props?.selection, props?.subjects)
+        )
+      );
       setLoading(false);
     }
-  }, [props]);
+  }, []);
 
-  const calculateProgress = () => {
-    if (questions.length <= 0 || index < 0 || index >= questions.length) {
-      return 0;
-    }
-    let progress = (index / questions.length) * 100;
-    return progress.toFixed(2);
+  const chooseRandomQuestion = (total = questions.length) => {
+    setIndex(Math.floor(Math.random() * total));
+  };
+  const backToHome = () => {
+    props?.clearSelection();
+    props?.setIsAssessment(false);
   };
 
   const LOADING_HTML = () => {
     return (
-      <div className="py-[4rem] px-[10rem] bg-white shadow-2xl rounded-lg flex justify-center items-center">
+      <div className="py-[4rem] bg-white shadow-2xl rounded-lg flex justify-center items-center">
         <svg
           aria-hidden="true"
-          class="inline w-10 h-10 text-gray-500 animate-spin fill-white"
+          className="inline w-10 h-10 text-gray-500 animate-spin fill-black"
           viewBox="0 0 100 101"
-          fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
@@ -75,37 +48,10 @@ export default function Assessment(props) {
       </div>
     );
   };
-
-  const RESULTS = () => {
-    return (
-      <div className="py-[4rem] px-[10rem] bg-white  rounded-lg flex justify-center items-center flex-col">
-        <div className="text-4xl font-bold mb-10">Final Results</div>
-        <div className="text-2xl mb-4">
-          Attempted{" "}
-          <span className="text-_accent_1_ font-bold">{questions.length}</span>{" "}
-          questions.
-        </div>
-        <div className="text-2xl">
-          You scored <span className="text-_accent_1_ font-bold">{points}</span>{" "}
-          points.
-        </div>
-        <div className="mt-10">
-          <CustomButton
-            label="Home"
-            onClick={() => {
-              setResult(false);
-              props?.clearSelection();
-              props?.setIsAssessment(false);
-            }}
-          />
-        </div>
-      </div>
-    );
-  };
   return (
     <div className="mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
       <div className="mb-5 flex flex-col w-full">
-        <h1 className="text-center text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
+        <h1 className="text-center text-3xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
           Conjugations
           <div className="my-5"></div>
           <span className="leading-tighter tracking-tighter text-_accent_1_">
@@ -114,24 +60,20 @@ export default function Assessment(props) {
         </h1>
       </div>
       <div className="flex flex-col justify-center items-center w-full">
-        <div className="w-2/3">
-          {result ? (
-            <RESULTS />
-          ) : loading ? (
+        <div className="px-5 md:px-0 w-full md:w-2/3">
+          {loading ? (
             <LOADING_HTML />
           ) : (
             <QuestionTab
               subject={questions[index].subject}
               verb={questions[index].verb}
               tense={questions[index].tense}
-              progress={calculateProgress}
-              setIndex={setIndex}
+              chooseRandomQuestion={chooseRandomQuestion}
               setLoading={setLoading}
-              isLast={questions.length - 1 === index}
               isLoggedIn={props?.session?.isLoggedIn}
               userId={props?.session?.personal?.id}
-              setPoints={setPoints}
-              setResult={setResult}
+              updatePoints={props?.updatePoints}
+              backToHome={backToHome}
             />
           )}
         </div>

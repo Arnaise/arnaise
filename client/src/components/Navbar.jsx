@@ -39,9 +39,9 @@ export default function Navbar(props) {
   const [isOpenProfile, setIsOpenProfile] = useState(false);
 
   const logout = async (nav) => {
-    sessionStorage.removeItem("access_token");
-    sessionStorage.removeItem("refresh_token");
-    sessionStorage.removeItem("loggedin");
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("loggedin");
     props?.setSession({
       ...props?.session,
       personal: props?.__init_session.personal,
@@ -49,8 +49,9 @@ export default function Navbar(props) {
     });
     nav("/");
   };
+
   return (
-    <nav className="h-[4rem] fles justify-center items-center w-full bg-white border-gray-200 dark:bg-gray-900 drop-shadow-2xl z-10">
+    <nav className="h-[4rem] w-full bg-white border-gray-200 dark:bg-gray-900 drop-shadow-2xl z-10">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link to="/" className="flex items-center">
           <img
@@ -67,6 +68,15 @@ export default function Navbar(props) {
         <div className="flex items-center relative md:order-2">
           {props?.isLoggedIn ? (
             <>
+              <span
+                className={`cursor-pointer ${
+                  props?.points <= 0
+                    ? "bg-red-100 text-red-800"
+                    : "bg-blue-100 text-blue-800"
+                } text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300`}
+              >
+                {props?.points} Points
+              </span>
               <button
                 className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                 onClick={() => {
@@ -161,7 +171,9 @@ export default function Navbar(props) {
         >
           <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>{renderLink("/", "Home")}</li>
-            <li>{renderLink("/records", "Records")}</li>
+            {props?.isLoggedIn && <li>{renderLink("/records", "Records")}</li>}
+            <li>{renderLink("/leaderboard", "Leaderboard")}</li>
+            {props?.isLoggedIn && <li>{renderLink("/rooms", "Rooms")}</li>}
             {/* <li>{renderLink("/", "Mistakes")}</li>
             <li>{renderLink("/", "Conjugation")}</li> */}
           </ul>

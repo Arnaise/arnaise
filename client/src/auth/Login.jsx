@@ -37,7 +37,7 @@ const Login = () => {
               if (res.message) {
                 setMessage(res.message, "red-500");
               } else {
-                sessionStorage.setItem(
+                localStorage.setItem(
                   "loggedin",
                   JSON.stringify({
                     data: res,

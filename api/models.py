@@ -103,3 +103,14 @@ class Logs(models.Model):
 
     def __str__(self):
         return f"{self.correctAnswer} - {self.user.fullName}"
+
+
+class Problem(models.Model):
+    text = models.TextField(unique=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Problems"
+
+    def __str__(self):
+        return f"{self.text}"

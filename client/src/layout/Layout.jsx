@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import UserData from "../contexts/UserData";
 import Navbar from "../components/Navbar";
-import { CONSTANT } from "../CONSTANT";
+import { CONSTANT, checkLoginFromNonLogin } from "../CONSTANT";
 import BackgroundBlur from "../components/BackgroundBlur";
 import { IconContext } from "react-icons";
 import axios from "axios";
@@ -15,20 +15,28 @@ export default function Layout(props) {
     personal: {
       id: "",
       email: "",
-      username: "",
-      role: "",
+      fullName: "",
+      points: "",
+      timestamp: "",
     },
     isLoggedIn: false,
+    isLoaded: false,
   };
   const [session, setSession] = useState(__init_session);
 
   useEffect(() => {
-    let sessionData = JSON.parse(sessionStorage.getItem("loggedin"));
+    let sessionData = JSON.parse(localStorage.getItem("loggedin"));
     if (sessionData) {
       setSession({
         ...__init_session,
         personal: sessionData.data,
         isLoggedIn: true,
+        isLoaded: true,
+      });
+    } else {
+      setSession({
+        ...__init_session,
+        isLoaded: true,
       });
     }
     fetchOptions();
@@ -51,28 +59,56 @@ export default function Layout(props) {
       });
   };
 
-  const value = { session, setSession, options };
+  const updatePoints = (point) => {
+    let update = {
+      ...session?.personal,
+      points: points + parseInt(point),
+    };
+    setPoints(update.points);
+    localStorage.setItem(
+      "loggedin",
+      JSON.stringify({
+        data: update,
+      })
+    );
+  };
+
+  const [points, setPoints] = useState(0);
+
+  useEffect(() => {
+    if (session?.isLoggedIn) {
+      setPoints(session?.personal?.points);
+    }
+  }, [session]);
+
+  const value = { session, setSession, options, updatePoints };
   // ------------------
   // SESSION - END
   // ------------------
-  // useEffect(() => {
-  //   if (checkLoginFromNonLogin()) {
-  //     navigate("/login");
-  //   }
-  // }, [session]);
+  useEffect(() => {
+    if (checkLoginFromNonLogin() && props?.login) {
+      navigate("/login");
+    }
+  }, [session]);
 
   return (
     <>
       <UserData.Provider value={value}>
-        <IconContext.Provider value={{className:"text-_accent_1_ hover:opacity-60 transition-all duration-300 ease-in-out"}}>
+        <IconContext.Provider
+          value={{
+            className:
+              "text-_accent_1_ hover:opacity-60 transition-all duration-300 ease-in-out",
+          }}
+        >
           <Navbar
             isLoggedIn={session.isLoggedIn}
             __init_session={__init_session}
             setSession={setSession}
             session={session}
+            points={points}
           />
           {/* <BackgroundBlur /> */}
-          <div className="mx-10">{props.children}</div>
+          <div className="mx-0 md:mx-10">{props.children}</div>
         </IconContext.Provider>
       </UserData.Provider>
     </>

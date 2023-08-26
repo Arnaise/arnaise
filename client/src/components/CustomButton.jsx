@@ -5,7 +5,7 @@ const LOADING_HTML = () => {
     <div role="status">
       <svg
         aria-hidden="true"
-        class="inline w-4 h-4 text-gray-200 animate-spin fill-white"
+        className="inline w-4 h-4 text-gray-200 animate-spin fill-white"
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -38,7 +38,7 @@ export default function CustomButton(props) {
       }}
       className={`${
         isLoading || (props?.disabled && "pointer-events-none opacity-70")
-      } capitalize px-10 py-2 rounded-lg hover:opacity-60 transition-all duration-300 ease-in-out bg-gradient-to-r from-rose-700 to-pink-600 text-white`}
+      } capitalize px-4 md:px-10 py-2 rounded-lg hover:opacity-60 transition-all duration-300 ease-in-out bg-gradient-to-r from-rose-700 to-pink-600 text-white`}
     >
       {isLoading ? <LOADING_HTML /> : props?.label}
     </button>

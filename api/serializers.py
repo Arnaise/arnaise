@@ -26,6 +26,11 @@ class LogsSerializer(serializers.ModelSerializer):
         model = models.Logs
         fields = "__all__"
 
+class ProblemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Problem
+        fields = "__all__"
+
 
 class LogsTensesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -49,7 +54,18 @@ class ViewLogsSerializer(serializers.ModelSerializer):
     tense = LogsTensesSerializer()
     subject = LogsSubjectsSerializer()
     verb = LogsVerbsSerializer()
+    points = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Logs
         fields = "__all__"
+
+    def get_points(self, obj):
+        if not obj.isCorrect:
+            return 0
+        finalPoints = int(obj.tense.points)
+        if obj.verb.isRegular:
+            finalPoints += 2
+        else:
+            finalPoints += 5
+        return finalPoints

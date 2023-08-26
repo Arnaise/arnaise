@@ -2,11 +2,15 @@ import React, { useState, useEffect, useContext } from "react";
 import MultipleSelect from "../components/MultipleSelect";
 import CustomButton from "../components/CustomButton";
 import UserData from "../contexts/UserData";
-import { capitalizeFirstLetter } from "../CONSTANT";
+import { CONSTANT, capitalizeFirstLetter } from "../CONSTANT";
 import Assessment from "./Assessment";
+import { formatSelections, makeConjugationQuestions } from "../UTILS";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Home() {
-  const { session, setSession, options } = useContext(UserData);
+  let navigate = useNavigate();
+  const { session, setSession, options, updatePoints } = useContext(UserData);
   // min-h-[calc(100vh-4rem)]
 
   const [isAssessment, setIsAssessment] = useState(false);
@@ -33,18 +37,41 @@ export default function Home() {
     return (
       <Assessment
         selection={selection}
-        subjects={options.subjects}
+        subjects={options?.subjects}
         session={session}
         setIsAssessment={setIsAssessment}
         clearSelection={clearSelection}
+        updatePoints={updatePoints}
       />
     );
   }
 
+  const createRoom = async () => {
+    let questions = makeConjugationQuestions(
+      formatSelections(selection, options?.subjects),
+      false
+    );
+    await axios
+      .post(CONSTANT.server + "room/create", {
+        creator: session?.personal?.id,
+        questions_json: JSON.stringify(questions),
+      })
+      .then((responce) => {
+        if (responce.status === 201) {
+          navigate("/rooms");
+        } else {
+          console.log("Error creating room:", responce.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
       <div className="mb-5 flex flex-col w-full">
-        <h1 className="text-center text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
+        <h1 className="text-center text-3xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
           Master
           <div className="my-5"></div>
           <span className="leading-tighter tracking-tighter text-_accent_1_">
@@ -53,7 +80,7 @@ export default function Home() {
         </h1>
       </div>
       <div className="flex flex-col justify-center items-center w-full">
-        <div className="w-1/2">
+        <div className="px-5 md:px-0 w-full md:w-1/2">
           <MultipleSelect
             mainLabel={"tenses"}
             label="Ex. Imparfait"
@@ -81,6 +108,7 @@ export default function Home() {
                   label: capitalizeFirstLetter(verb.value),
                   value: verb.value,
                   id: verb.id,
+                  isRegular: verb.isRegular,
                 };
               })}
             value={selection.regularVerbs}
@@ -105,7 +133,7 @@ export default function Home() {
             onChange={changeSelection}
             name="irregularVerbs"
           />
-          <div className="mt-10 flex justify-center">
+          <div className="mt-10 flex justify-center items-center space-x-5">
             <CustomButton
               label="Start"
               onClick={() => {
@@ -113,10 +141,21 @@ export default function Home() {
               }}
               disabled={
                 selection.tenses.length <= 0 ||
-                selection.regularVerbs.length <= 0 ||
-                selection.irregularVerbs.length <= 0
+                (selection.regularVerbs.length <= 0 &&
+                  selection.irregularVerbs.length <= 0)
               }
             />
+            {session?.isLoggedIn && (
+              <CustomButton
+                label="Create Room"
+                onClick={createRoom}
+                disabled={
+                  selection.tenses.length <= 0 ||
+                  (selection.regularVerbs.length <= 0 &&
+                    selection.irregularVerbs.length <= 0)
+                }
+              />
+            )}
           </div>
         </div>
       </div>

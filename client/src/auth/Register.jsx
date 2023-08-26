@@ -51,7 +51,7 @@ const Register = () => {
                 setMessage(getErrorMessage(res.message), "red-500");
                 // setMessage(res.message, "red-500");
               } else {
-                sessionStorage.setItem(
+                localStorage.setItem(
                   "loggedin",
                   JSON.stringify({
                     data: res,

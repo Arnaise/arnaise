@@ -25,6 +25,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    "channels",  # wsocket
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "authentication",
     "api",
+    "room",
 ]
 
 MIDDLEWARE = [
@@ -86,6 +88,18 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "project.wsgi.application"
+
+# socket
+ASGI_APPLICATION = "project.asgi.application"  # routing.py will handle the ASGI
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(os.environ.get("REDIS_URL", "127.0.0.1"), 6379)],
+        },
+    },
+}
+# socket
 
 
 # Database

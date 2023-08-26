@@ -17,3 +17,4 @@ tzdata==2022.1
 urllib3==1.26.13
 whitenoise==6.2.0
 schedule==1.1.0
+channels==3.0.5

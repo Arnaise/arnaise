@@ -6,10 +6,12 @@ const UserData = React.createContext({
     personal: {
       id: "",
       email: "",
-      username: "",
-      role: "",
+      fullName: "",
+      points: "",
+      timestamp: "",
     },
     isLoggedIn: false,
+    isLoaded: false,
   },
   setSession: () => {},
   options: {
@@ -17,6 +19,7 @@ const UserData = React.createContext({
     subjects: [],
     verbs: [],
   },
+  updatePoints: () => {},
 });
 
 export default UserData;

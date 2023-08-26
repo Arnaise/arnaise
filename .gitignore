@@ -9,7 +9,7 @@ lerna-debug.log*
 
 node_modules
 *.local
-
+env
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -21,6 +21,6 @@ node_modules
 *.sln
 *.sw?
 
-db.sqlite3
+# db.sqlite3
 bugs.md
 __pycache__

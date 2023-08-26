@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,7 +12,7 @@
 body {
   /* background: linear-gradient(to right, rgb(255, 228, 230), rgb(204, 251, 241)); */
   background: white;
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
 }
 
 .__MULTI_SELECT__ {
@@ -20,4 +20,10 @@ body {
 
 .__MULTI_SELECT__ .dropdown-container {
   background-color: transparent !important;
+}
+
+.App {
+  overflow-x: hidden;
+  min-height: 100vh;
+  height: 100%;
 }

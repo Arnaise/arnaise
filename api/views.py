@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.http.response import JsonResponse
 from rest_framework.decorators import (
     api_view,
@@ -10,10 +9,8 @@ from . import serializers
 from . import constants
 from rest_framework import status
 from rest_framework.parsers import JSONParser
-from django.contrib.auth.hashers import make_password
-import base64
 from authentication.models import CustomUsers
-from .helpers import email_new_listing
+from django.db.models import Sum, F, Case, When, IntegerField, BooleanField
 
 
 def initialize_backend():
@@ -64,6 +61,29 @@ def initialize_backend():
 # Call the function to initialize the backend
 initialize_backend()
 
+# import random
+
+
+# def bulk_create_users():
+#     user_data = [
+#         {
+#             "email": f"user{i}@example.com",
+#             "fullName": f"User {i}",
+#             "password": "password123",
+#             "points": random.randint(
+#                 0, 1000
+#             ),  # Generate random points between 0 and 1000
+#         }
+#         for i in range(1, 21)
+#     ]
+
+#     created_users = CustomUsers.objects.bulk_create(
+#         CustomUsers(**data) for data in user_data
+#     )
+
+
+# bulk_create_users()
+
 
 @api_view(["GET", "POST"])
 @permission_classes([])
@@ -111,12 +131,96 @@ def logs(request, user_id=None):
             serializer.save()
             user = models.CustomUsers.objects.get(pk=int(data["user"]))
             tense = models.Tenses.objects.get(pk=int(data["tense"]))
-            user.points = int(user.points) + int(tense.points)
+            verb = models.Verbs.objects.get(pk=int(data["verb"]))
+            finalPoints = int(tense.points)
+            if verb.isRegular:
+                finalPoints += 2
+            else:
+                finalPoints += 5
+            user.points = int(user.points) + finalPoints
             user.save()
 
             return JsonResponse(
                 {"content": serializer.data}, status=status.HTTP_202_ACCEPTED
             )
+        return JsonResponse(
+            {"message": "Not valid data!"}, status=status.HTTP_202_ACCEPTED
+        )
+
+
+@api_view(["POST", "GET"])
+@permission_classes([])
+@authentication_classes([])
+def leaderboard(request):
+    if request.method == "GET":
+        leaderboard_query = (
+            CustomUsers.objects.filter(is_superuser=False)
+            .annotate(total_correct=Sum("logs__isCorrect", output_field=IntegerField()))
+            .order_by("-points", "fullName")[:10]
+        )
+        leaderboard_data = []
+        position = 1
+        for entry in leaderboard_query:
+            data = {
+                "fullName": entry.fullName,
+                "points": entry.points,
+                "correct": entry.total_correct
+                if entry.total_correct is not None
+                else 0,
+                "position": position if position is not None else 0,
+            }
+            leaderboard_data.append(data)
+            position += 1
+        return JsonResponse(leaderboard_data, safe=False)
+    elif request.method == "POST":
+        user_id = request.data.get("user_id")
+
+        if user_id is not None:
+            user = CustomUsers.objects.filter(pk=user_id, is_superuser=False).first()
+
+            if user is not None:
+                total_correct = models.Logs.objects.filter(user=user).aggregate(
+                    total_correct=Sum("isCorrect")
+                )["total_correct"]
+                leaderboard_query = CustomUsers.objects.filter(
+                    is_superuser=False
+                ).order_by("-points")
+                user_position = next(
+                    (
+                        position + 1
+                        for position, entry in enumerate(leaderboard_query)
+                        if entry.pk == user_id
+                    ),
+                    None,
+                )
+
+                user_data = {
+                    "fullName": user.fullName,
+                    "points": user.points,
+                    "correct": total_correct if total_correct is not None else 0,
+                    "position": user_position if user_position is not None else 0,
+                }
+
+                if user_data["position"] <= 10:
+                    return JsonResponse(None, safe=False)
+
+                return JsonResponse(user_data)
+            else:
+                return JsonResponse({"error": "User not found"}, status=404)
+        else:
+            return JsonResponse({"error": "user_id is required"}, status=400)
+
+
+@api_view(["POST"])
+@permission_classes([])
+@authentication_classes([])
+def problems(request):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        serializer = serializers.ProblemSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse({"content": {}}, status=status.HTTP_202_ACCEPTED)
         return JsonResponse(
             {"message": "Not valid data!"}, status=status.HTTP_202_ACCEPTED
         )

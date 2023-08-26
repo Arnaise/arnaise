@@ -6,6 +6,10 @@ import Layout from "./layout/Layout";
 import TakeMeToAdmin from "./components/TakeMeToAdmin";
 import Register from "./auth/Register";
 import Records from "./views/Records";
+import Leaderboard from "./views/Leaderboard";
+import Rooms from "./views/Rooms";
+import Lobby from "./views/Lobby";
+import Profile from "./views/Profile";
 
 function App() {
   return (
@@ -23,8 +27,40 @@ function App() {
           <Route
             path="/records"
             element={
-              <Layout>
+              <Layout login={true}>
                 <Records />
+              </Layout>
+            }
+          />
+          <Route
+            path="/leaderboard"
+            element={
+              <Layout>
+                <Leaderboard />
+              </Layout>
+            }
+          />
+          <Route
+            path="/rooms"
+            element={
+              <Layout login={true}>
+                <Rooms />
+              </Layout>
+            }
+          />
+          <Route
+            path="/room/:code"
+            element={
+              <Layout login={true}>
+                <Lobby />
+              </Layout>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <Layout login={true}>
+                <Profile />
               </Layout>
             }
           />
