@@ -91,7 +91,7 @@ const Register = () => {
 
   return (
     <div className="flex flex-col justify-center items-center w-full min-h-screen">
-      <div className="w-1/3 backdrop-blur-3xl rounded-3xl bg-white/30 px-20 py-10">
+      <div className="px-5 md:px-0 w-full md:w-1/3 backdrop-blur-3xl rounded-3xl bg-white/30 px-20 py-10">
         <div className="mb-5 flex justify-center items-center">
           <Link to="/">
             <img src={SITE_DETAILS.logo} className="invert-[100] w-[8rem]" />
