@@ -25,7 +25,6 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    "daphne",
     "channels",  # wsocket
     "django.contrib.admin",
     "django.contrib.auth",
