@@ -59,7 +59,7 @@ export default function QuestionTab(props) {
         props?.tense?.value,
         props?.subject?.value
       );
-      // console.log(trueValue);
+      console.log(trueValue);
       if (!trueValue) {
         props?.chooseRandomQuestion();
       }
