@@ -88,6 +88,8 @@ TEMPLATES = [
     },
 ]
 
+CORS_ALLOW_WEBSOCKETS = True
+
 WSGI_APPLICATION = "project.wsgi.application"
 
 # socket
@@ -96,7 +98,11 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("redis://default:CKOFxBomrHKWCnqcLLIvc0RePltiJoA2@redis-15811.c281.us-east-1-2.ec2.cloud.redislabs.com:15811")],
+            "hosts": [
+                (
+                    "redis://default:CKOFxBomrHKWCnqcLLIvc0RePltiJoA2@redis-15811.c281.us-east-1-2.ec2.cloud.redislabs.com:15811"
+                )
+            ],
             # "hosts": [(os.environ.get("REDIS_URL", "127.0.0.1"), 6379)],
         },
     },
