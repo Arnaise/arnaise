@@ -9,7 +9,7 @@ import axios from "axios";
 
 export const CONSTANT = {
   server: "https://auth-db.rfrsh.io/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-  socket: "wss://auth-db.rfrsh.io/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+  socket: "wss://db.rfrsh.io/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
   admin: "https://auth-db.rfrsh.io/admin", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
   client: "https://auth-db.rfrsh.io/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
 };
