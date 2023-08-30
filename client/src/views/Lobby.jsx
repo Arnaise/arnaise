@@ -154,7 +154,7 @@ export default function Lobby() {
   const [socket, setSocket] = useState(null);
 
   const setupWebSocket = () => {
-    const newSocket = new WebSocket(CONSTANT.socket + `ws/room/${code}/`);
+    const newSocket = new WebSocket(CONSTANT.socket + `wss/room/${code}/`);
     newSocket.onopen = () => {
       setSocket(newSocket);
       console.log(`Connected to server.`);
