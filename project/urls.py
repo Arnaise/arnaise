@@ -27,6 +27,6 @@ urlpatterns = [
     path('api/', include('api.urls')),
     path('room/', include('room.urls')),
     path('authentication/', include('authentication.urls')),
-    # path("/", index, name="index"),
-    # re_path(r'^(?:.*)/?$', index),
+    path("/", index, name="index"),
+    re_path(r'^(?:.*)/?$', index),
 ]
