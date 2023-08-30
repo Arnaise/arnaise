@@ -97,7 +97,7 @@ CHANNEL_LAYERS = {
         "CONFIG": {
             # "hosts": [(os.environ.get("REDIS_URL", "127.0.0.1"), 6379)],
             # "hosts": [(os.environ.get("REDIS_URL", "auth-db.rfrsh.io"), 57863)],
-            "hosts": [(os.environ.get("REDIS_URL", "auth-db.rfrsh.io"), 57863)],
+            "hosts": [(os.environ.get("REDIS_URL", "rehansathio.pythonanywhere.com"), 57863)],
         },
     },
 }

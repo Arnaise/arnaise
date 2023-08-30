@@ -1,18 +1,18 @@
 import axios from "axios";
 
-// export const CONSTANT = {
-//   server: "http://rehansathio.pythonanywhere.com/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-//   socket: "wss://rehansathio.pythonanywhere.com/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-//   admin: "http://rehansathio.pythonanywhere.com/admin", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-//   client: "http://rehansathio.pythonanywhere.com/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
-// };
-
 export const CONSTANT = {
-  server: "https://auth-db.rfrsh.io/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-  socket: "wss://auth-db.rfrsh.io/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-  admin: "https://auth-db.rfrsh.io/admin", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-  client: "https://auth-db.rfrsh.io/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
+  server: "http://rehansathio.pythonanywhere.com/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+  socket: "wss://rehansathio.pythonanywhere.com/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+  admin: "http://rehansathio.pythonanywhere.com/admin", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+  client: "http://rehansathio.pythonanywhere.com/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
 };
+
+// export const CONSTANT = {
+//   server: "https://auth-db.rfrsh.io/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+//   socket: "wss://auth-db.rfrsh.io/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+//   admin: "https://auth-db.rfrsh.io/admin", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+//   client: "https://auth-db.rfrsh.io/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
+// };
 
 // export const CONSTANT = {
 //   server: "http://127.0.0.1:8000/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
