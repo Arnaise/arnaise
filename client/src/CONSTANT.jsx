@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const CONSTANT = {
   server: "http://rehansathio.pythonanywhere.com/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-  socket: "ws://rehansathio.pythonanywhere.com/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+  socket: "wss://rehansathio.pythonanywhere.com/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
   admin: "http://rehansathio.pythonanywhere.com/admin", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
   client: "http://rehansathio.pythonanywhere.com/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
 };
