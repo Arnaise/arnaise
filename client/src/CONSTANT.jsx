@@ -1,10 +1,17 @@
 import axios from "axios";
 
+// export const CONSTANT = {
+//   server: "http://159.65.222.117:8000/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+//   socket: "ws://159.65.222.117:8000/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+//   admin: "http://159.65.222.117:8000/admin", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+//   client: "http://159.65.222.117:8000/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
+// };
+
 export const CONSTANT = {
-  server: "http://159.65.222.117:8000/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-  socket: "ws://159.65.222.117:8000/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-  admin: "http://159.65.222.117:8000/admin", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-  client: "http://159.65.222.117:8000/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
+  server: "http://159.65.222.117:57863/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+  socket: "ws://159.65.222.117:57863/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+  admin: "http://159.65.222.117:57863/admin", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+  client: "http://159.65.222.117:57863/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
 };
 
 // export const CONSTANT = {
