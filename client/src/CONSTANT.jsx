@@ -1,10 +1,10 @@
 import axios from "axios";
 
 export const CONSTANT = {
-  server: "http://159.89.12.10:8000/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-  socket: "ws://159.89.12.10:8000/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-  admin: "http://159.89.12.10:8000/admin", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-  client: "http://159.89.12.10:8000/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
+  server: "https://verbl.be/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+  socket: "wss://verbl.be/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+  admin: "https://verbl.be/admin", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+  client: "https://verbl.be/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
 };
 
 // export const CONSTANT = {
