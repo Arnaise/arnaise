@@ -122,7 +122,7 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         return [
             {
                 "id": player.user.id,
-                "fullName": player.user.fullName,
+                "username": player.user.username,
                 "points": player.user.points,
                 "isInLobby": player.user.id
                 in self.connected_users_by_room.get(self.room_code, {}).values(),

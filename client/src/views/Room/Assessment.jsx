@@ -143,7 +143,7 @@ export default function Assessment(props) {
                         return (
                           <PROGRESS_LINE
                             key={play?.id}
-                            name={play?.fullName}
+                            name={play?.username}
                             width={evaluateProgress(play?.attempt)}
                             index={index}
                             isMe={

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from . import models
 
-BASIC_ITEMS = ["email", "fullName", "points"]
+BASIC_ITEMS = ["username", "points"]
 
 
 class CustomUserSerializer(serializers.ModelSerializer):

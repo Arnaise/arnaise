@@ -16,12 +16,12 @@ from django.db.models import Sum, F, Case, When, IntegerField, BooleanField
 def initialize_backend():
     try:
         # Check if admin exists
-        admin_exists = CustomUsers.objects.filter(email="admin@admin.com").exists()
+        admin_exists = CustomUsers.objects.filter(username="admin").exists()
         if not admin_exists:
             # Add admin user
             CustomUsers.objects.create_user(
                 password="admin",
-                email="admin@admin.com",
+                username="admin",
                 is_staff=True,
                 is_superuser=True,
             )
@@ -67,8 +67,7 @@ initialize_backend()
 # def bulk_create_users():
 #     user_data = [
 #         {
-#             "email": f"user{i}@example.com",
-#             "fullName": f"User {i}",
+#             "username": f"user{i}",
 #             "password": "password123",
 #             "points": random.randint(
 #                 0, 1000
@@ -156,13 +155,13 @@ def leaderboard(request):
         leaderboard_query = (
             CustomUsers.objects.filter(is_superuser=False)
             .annotate(total_correct=Sum("logs__isCorrect", output_field=IntegerField()))
-            .order_by("-points", "fullName")[:10]
+            .order_by("-points", "username")[:10]
         )
         leaderboard_data = []
         position = 1
         for entry in leaderboard_query:
             data = {
-                "fullName": entry.fullName,
+                "username": entry.username,
                 "points": entry.points,
                 "correct": entry.total_correct
                 if entry.total_correct is not None
@@ -195,7 +194,7 @@ def leaderboard(request):
                 )
 
                 user_data = {
-                    "fullName": user.fullName,
+                    "username": user.username,
                     "points": user.points,
                     "correct": total_correct if total_correct is not None else 0,
                     "position": user_position if user_position is not None else 0,

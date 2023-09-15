@@ -36,7 +36,7 @@ class DisplayRoomSerializer(serializers.ModelSerializer):
         return obj.creator.id
 
     def get_created_by(self, obj):
-        return obj.creator.fullName
+        return obj.creator.username
 
     def get_count_of_players(self, obj):
         return Player.objects.filter(game_room=obj).count()
@@ -71,7 +71,7 @@ class OneRoomSerializer(serializers.ModelSerializer):
         return obj.creator.id
 
     def get_created_by(self, obj):
-        return obj.creator.fullName
+        return obj.creator.username
 
     def get_count_of_players(self, obj):
         return Player.objects.filter(game_room=obj).count()

@@ -99,7 +99,7 @@ const UserComponent = ({ user, online, creator, isExpired, index }) => {
       {/* Placeholder for avatar */}
       <div className="ml-2">
         <p className="flex flex-row justify-start items-center text-black">
-          {user.fullName}
+          {user.username}
           {online && (
             <span className="ml-1 block bg-green-500 w-2 h-2 rounded-full"></span>
           )}
@@ -109,7 +109,7 @@ const UserComponent = ({ user, online, creator, isExpired, index }) => {
         {isExpired && <p className="">Position: {ordinal(index + 1)}</p>}
         <span className="flex flex-row space-x-1 mt-1">
           <p className="text-xs bg-blue-100 text-blue-800 w-fit px-2 rounded-lg">
-            {creator === user.fullName ? "Creator" : "Player"}
+            {creator === user.username ? "Creator" : "Player"}
           </p>
           {index === 0 && isExpired && (
             <p className="text-xs bg-emerald-100 text-emerald-800 w-fit px-2 rounded-lg">
@@ -294,7 +294,7 @@ export default function Lobby() {
                         return a?.isInLobby;
                       })}
                       online={true}
-                      creator={session?.personal?.fullName}
+                      creator={session?.personal?.username}
                       label={"Online"}
                     />
                   </div>
@@ -304,7 +304,7 @@ export default function Lobby() {
                         return !a?.isInLobby;
                       })}
                       online={false}
-                      creator={session?.personal?.fullName}
+                      creator={session?.personal?.username}
                       label={"Offline"}
                     />
                   </div>
@@ -316,7 +316,7 @@ export default function Lobby() {
                     <PlayersTab
                       players={online}
                       online={false}
-                      creator={session?.personal?.fullName}
+                      creator={session?.personal?.username}
                       label={""}
                     />
                   </div>

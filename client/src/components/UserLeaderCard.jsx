@@ -35,7 +35,7 @@ const UserLeaderCard = (props) => {
         </div>
       )}
       <div className="w-full">
-        <p className="font-bold text-lg">{props?.data?.fullName}</p>
+        <p className="font-bold text-lg">@{props?.data?.username}</p>
         <div className="flex justify-between items-center">
           <div className="flex flex-col flex-1">
             <p className="text-base text-gray-600 mt-1">

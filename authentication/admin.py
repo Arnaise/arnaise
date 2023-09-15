@@ -1,32 +1,25 @@
 from django.contrib.auth.models import Group
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from . import models
 
 # Register your models here.
 
 
-class UserAdmin(admin.ModelAdmin):
-    exclude = (
-        "first_name",
-        "last_name",
-        "groups",
-        "user_permissions",
-        "is_staff",
-        "is_active",
-        "is_superuser",
-        "last_login",
-        "date_joined",
-        "username",
+class UserAdmin(BaseUserAdmin):
+    fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        ("Additional Info", {"fields": ("points",)}),  # Add points field here
     )
-    list_display = ("email", "is_admin")
-    list_filter = (
-        "is_staff",
-        "timestamp",
-    )
+    list_display = ("username", "points", "is_admin")
+    list_filter = ("is_staff", "is_superuser", "is_active")
+    search_fields = ("username",)
+    ordering = ("username",)
 
     def is_admin(self, obj):
-        pl = "✔️" if obj.is_staff else "❌"
-        return pl
+        return obj.is_staff
+
+    is_admin.short_description = "Is Admin"
 
 
 admin.site.register(models.CustomUsers, UserAdmin)

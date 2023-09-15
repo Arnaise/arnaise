@@ -14,8 +14,7 @@ export default function Layout(props) {
   let __init_session = {
     personal: {
       id: "",
-      email: "",
-      fullName: "",
+      username: "",
       points: "",
       timestamp: "",
     },

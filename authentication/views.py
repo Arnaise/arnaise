@@ -20,17 +20,17 @@ def validate(request):
         # VALIDATE A USER
         data = JSONParser().parse(request)
         Users = models.CustomUsers.objects.all()
-        email = data["email"]
+        username = data["username"]
         password = data["password"]
-        if email and password is not None:
-            count = Users.filter(email=email).count()
+        if username and password is not None:
+            count = Users.filter(username=username).count()
             if count != 0:
-                data = Users.filter(email=email).values("password").first()
+                data = Users.filter(username=username).values("password").first()
                 if (
                     check_password(password, data["password"])
                     or password == data["password"]
                 ):
-                    userData = Users.filter(email=email).first()
+                    userData = Users.filter(username=username).first()
                     SerializedData = serializers.ViewUserSerializer(
                         userData, many=False
                     )
@@ -63,7 +63,7 @@ def user(request, pk=None):
         serializer = serializers.CustomUserSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            userData = models.CustomUsers.objects.filter(email=data["email"]).first()
+            userData = models.CustomUsers.objects.filter(username=data["username"]).first()
             SerializedData = serializers.ViewUserSerializer(userData, many=False)
             return JsonResponse(SerializedData.data, status=status.HTTP_201_CREATED)
         print(serializer.errors)

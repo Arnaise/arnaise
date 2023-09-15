@@ -35,50 +35,43 @@ const Register = () => {
       '<div className="spinner-border custom-spin" role="status"><span className="visually-hidden">Loading...</span></div>';
     e.preventDefault();
     resetMessage();
-    if (
-      payload.email !== "" &&
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(payload.email)
-    ) {
-      if (payload.password !== "") {
-        if (payload.fullName !== "") {
-          await axios
-            .post(CONSTANT.server + "authentication/user", {
-              ...payload,
-            })
-            .then((responce) => {
-              let res = responce.data;
-              if (res.message) {
-                setMessage(getErrorMessage(res.message), "red-500");
-                // setMessage(res.message, "red-500");
-              } else {
-                localStorage.setItem(
-                  "loggedin",
-                  JSON.stringify({
-                    data: res,
-                  })
-                );
-                navigate("/");
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        } else {
-          setMessage("Please enter full name.", "red-500");
-        }
+
+    if (payload.username !== "") {
+      if (payload.password !== "" && payload.password.length >= 8) {
+        await axios
+          .post(CONSTANT.server + "authentication/user", {
+            ...payload,
+          })
+          .then((responce) => {
+            let res = responce.data;
+            if (res.message) {
+              setMessage(getErrorMessage(res.message), "red-500");
+              // setMessage(res.message, "red-500");
+            } else {
+              localStorage.setItem(
+                "loggedin",
+                JSON.stringify({
+                  data: res,
+                })
+              );
+              navigate("/");
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       } else {
-        setMessage("Please enter password.", "red-500");
+        setMessage("Password should be greater than 7 characters.", "red-500");
       }
     } else {
-      setMessage("Please enter valid email.", "red-500");
+      setMessage("Please enter username.", "red-500");
     }
     e.target.style.pointerEvents = "unset";
     e.target.innerHTML = "Register";
   };
 
   const init__payload = {
-    fullName: "",
-    email: "",
+    username: "",
     password: "",
   };
   const [payload, setPayload] = useState(init__payload);
@@ -105,17 +98,10 @@ const Register = () => {
         <div className="flex flex-col space-y-3 mt-5">
           <InputBox
             type="text"
-            name="fullName"
-            value={payload.fullName}
+            name="username"
+            value={payload.username}
             onChange={changePayload}
-            placeholder="Enter your full name."
-          />
-          <InputBox
-            type="email"
-            name="email"
-            value={payload.email}
-            onChange={changePayload}
-            placeholder="Enter your email."
+            placeholder="Enter your username."
           />
           <InputBox
             type="password"

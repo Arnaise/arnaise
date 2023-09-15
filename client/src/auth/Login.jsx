@@ -24,10 +24,7 @@ const Login = () => {
       '<div className="spinner-border custom-spin" role="status"><span className="visually-hidden">Loading...</span></div>';
     e.preventDefault();
     resetMessage();
-    if (
-      payload.email !== "" &&
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(payload.email)
-    ) {
+    if (payload.username !== "") {
       if (payload.password !== "") {
         await axios
           .post(CONSTANT.server + "authentication/validate", payload)
@@ -51,10 +48,10 @@ const Login = () => {
             console.log(error);
           });
       } else {
-        setMessage("Please Enter Password", "red-500");
+        setMessage("Please enter password.", "red-500");
       }
     } else {
-      setMessage("Please Enter Valid Email", "red-500");
+      setMessage("Please enter valid username.", "red-500");
     }
     e.target.style.pointerEvents = "unset";
     e.target.innerHTML = "Log In";
@@ -87,11 +84,11 @@ const Login = () => {
         </h1>
         <div className="flex flex-col space-y-3 mt-5">
           <InputBox
-            type="email"
-            name="email"
-            value={payload.email}
+            type="text"
+            name="username"
+            value={payload.username}
             onChange={changePayload}
-            placeholder="Enter your email."
+            placeholder="Enter your username."
           />
           <InputBox
             type="password"

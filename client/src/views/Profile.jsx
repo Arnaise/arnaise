@@ -18,13 +18,9 @@ export default function Profile() {
         <div className="px-5 md:px-0 w-full md:w-2/3">
           <div className="flex flex-col md:flex-row bg-white p-4 md:space-x-6 rounded-lg shadow-2xl">
             <div className="md:w-1/2">
-              <label className="font-semibold text-gray-700">Email</label>
-              <p>{session?.personal.email}</p>
+              <label className="font-semibold text-gray-700">Username</label>
+              <p>@{session?.personal.username}</p>
             </div>
-          </div>
-          <div className="bg-white p-4 mt-4 rounded-lg shadow-2xl">
-            <label className="font-semibold text-gray-700">Full Name</label>
-            <p>{session?.personal.fullName}</p>
           </div>
           <div className="bg-white p-4 mt-4 rounded-lg shadow-2xl">
             <label className="font-semibold text-gray-700">Points</label>
