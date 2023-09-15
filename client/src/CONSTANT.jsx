@@ -3,7 +3,7 @@ import axios from "axios";
 export const CONSTANT = {
   server: "https://verbl.be/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
   socket: "wss://verbl.be/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
-  admin: "https://verbl.be/admin", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
+  admin: "https://verbl.be/admin/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
   client: "https://verbl.be/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
 };
 
