@@ -14,10 +14,12 @@ TENSES = [
 SUBJECTS = [
     {"label": "je", "value": 0},
     {"label": "tu", "value": 1},
-    {"label": "il/elle", "value": 2},
+    {"label": "il", "value": 2},
+    {"label": "elle", "value": 2},
     {"label": "nous", "value": 3},
     {"label": "vous", "value": 4},
-    {"label": "ils/elles", "value": 5},
+    {"label": "ils", "value": 5},
+    {"label": "elles", "value": 5},
 ]
 
 IRREGULAR_VERBS = [

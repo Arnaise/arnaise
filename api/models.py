@@ -39,7 +39,6 @@ class Subjects(models.Model):
     )
     value = models.CharField(
         max_length=50,
-        unique=True,
         help_text="Fixed parameter value that is required for library.",
         blank=False,
         null=False,

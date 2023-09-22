@@ -65,7 +65,6 @@ function App() {
             }
           />
           <Route path="/admin" element={<TakeMeToAdmin />} />
-          <Route path="/admin/" element={<TakeMeToAdmin />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

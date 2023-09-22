@@ -57,7 +57,7 @@ export default function QuestionTab(props) {
       let trueValue = getConjugationAnswer(
         props?.verb?.value,
         props?.tense?.value,
-        props?.subject?.value
+        props?.subject
       );
       console.log(trueValue);
       if (!trueValue) {
@@ -75,7 +75,7 @@ export default function QuestionTab(props) {
     let trueValue = getConjugationAnswer(
       props?.verb?.value,
       props?.tense?.value,
-      props?.subject?.value
+      props?.subject
     );
     let isCorrect = true;
     if (trueValue.toLowerCase() === answer.toLowerCase()) {

@@ -15,10 +15,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-$e1cf#j&q@%tg+*%#4)x9=02uxs45&atxa+6@a!a1ocqwr0m=o"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
-# CSRF_TRUSTED_ORIGINS = ['http://*.domainname.com'] FOR AZURE
+CSRF_TRUSTED_ORIGINS = ['https://*.verbl.be']
 
 # DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
 
