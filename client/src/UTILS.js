@@ -100,8 +100,8 @@ export const getConjugationAnswer = (verb, tense, subject) => {
       answer = getConjugation(Lefff, verb, tense, parseInt(subject?.value));
     }
   } catch (error) {
-    console.log(error);
-    addError(error?.message);
+    // console.log(error);
+    // addError(error?.message);
   }
 
   return answer;
