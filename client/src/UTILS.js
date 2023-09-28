@@ -9,27 +9,28 @@ export const makeConjugationQuestions = (selection, all = true) => {
   selection.verbs.forEach((verb) => {
     selection.subjects.forEach((subject) => {
       selection.tenses.forEach((tense) => {
-        if (all) {
-          questions.push({
-            verb: verb,
-            subject: subject,
-            tense: tense,
-          });
-        } else {
-          if (
-            getConjugationAnswer(
-              verb?.value,
-              tense?.value,
-              parseInt(subject?.value)
-            )
-          ) {
-            questions.push({
-              verb: verb,
-              subject: subject,
-              tense: tense,
-            });
-          }
-        }
+        // if (all) {
+
+        // } else {
+        //   if (
+        //     getConjugationAnswer(
+        //       verb?.value,
+        //       tense?.value,
+        //       parseInt(subject?.value)
+        //     )
+        //   ) {
+        //     questions.push({
+        //       verb: verb,
+        //       subject: subject,
+        //       tense: tense,
+        //     });
+        //   }
+        // }
+        questions.push({
+          verb: verb,
+          subject: subject,
+          tense: tense,
+        });
       });
     });
   });
@@ -63,7 +64,7 @@ export const getConjugationAnswer = (verb, tense, subject) => {
       isAvoir = true;
     }
   } catch (e) {
-    console.log("ERROR: ", e);
+    // console.log("ERROR: ", e);
   }
 
   try {
