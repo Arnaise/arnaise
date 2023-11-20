@@ -1,0 +1,10 @@
+{
+  "apps": [
+    {
+      "name": "arnaise",
+      "args": "runserver 0.0.0.0:8000",
+      "script": "manage.py",
+      "exec_interpreter": "python"
+    }
+  ]
+}
