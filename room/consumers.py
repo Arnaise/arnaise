@@ -45,12 +45,16 @@ class LobbyConsumer(AsyncWebsocketConsumer):
 
         if message_type == "join":
             await self.join_lobby(message_data)
+        if message_type == "guest":
+            await self.guest_join_lobby(message_data)
         elif message_type == "start":
             await self.start_game()
         elif message_type == "progress":
             await self.update_progress(message_data)
         elif message_type == "end":
             await self.end_game()
+        elif message_type == "get_status":
+            await self.send_group_update("update.players")
 
     # Handling user joining the lobby
     async def join_lobby(self, payload):
@@ -61,6 +65,17 @@ class LobbyConsumer(AsyncWebsocketConsumer):
             self.connected_users_by_room.setdefault(self.room_code, {})[
                 self.channel_name
             ] = user_id
+            await self.send_group_update("update.players")
+
+    # Handling guest user joining the lobby
+    async def guest_join_lobby(self, payload):
+        username = payload["username"]
+        if username:
+            player = await self.create_or_get_guest_player(username, self.room)
+            self.player = player
+            self.connected_users_by_room.setdefault(self.room_code, {})[
+                self.channel_name
+            ] = username
             await self.send_group_update("update.players")
 
     # Handling the "start" message
@@ -115,19 +130,32 @@ class LobbyConsumer(AsyncWebsocketConsumer):
         return None
 
     @database_sync_to_async
+    def create_or_get_guest_player(self, username, room):
+        if username:
+            player, _ = Player.objects.get_or_create(
+                username=username, isGuest=True, game_room=room
+            )
+            return player
+        return None
+
+    @database_sync_to_async
     def get_player_data(self):
         players = Player.objects.filter(game_room__code=self.room_code).order_by(
             "-attempt"
         )
         return [
             {
-                "id": player.user.id,
-                "username": player.user.username,
-                "points": player.user.points,
+                "id": player.user.id if not player.isGuest else None,
+                "username": player.user.username if not player.isGuest else player.username,
+                "points": player.user.points if not player.isGuest else None,
                 "isInLobby": player.user.id
+                in self.connected_users_by_room.get(self.room_code, {}).values()
+                if not player.isGuest
+                else player.username
                 in self.connected_users_by_room.get(self.room_code, {}).values(),
                 "attempt": player.attempt,
                 "roomScore": player.score,
+                "isGuest": player.isGuest,
             }
             for player in players
         ]

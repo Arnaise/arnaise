@@ -1,4 +1,5 @@
 import React from "react";
+import { prepareLanguageText } from "../CONSTANT";
 
 const UserLeaderCard = (props) => {
   const decideColor = () => {
@@ -39,10 +40,12 @@ const UserLeaderCard = (props) => {
         <div className="flex justify-between items-center">
           <div className="flex flex-col flex-1">
             <p className="text-base text-gray-600 mt-1">
-              Points: <span className="font-bold">{props?.data?.points}</span>
+              {prepareLanguageText("Points", "Points")}:{" "}
+              <span className="font-bold">{props?.data?.points}</span>
             </p>
             <p className="text-base text-gray-600 mt-1">
-              Correct: <span className="font-bold">{props?.data?.correct}</span>
+              {prepareLanguageText("Correct", "Correctes")}:{" "}
+              <span className="font-bold">{props?.data?.correct}</span>
             </p>
           </div>
         </div>

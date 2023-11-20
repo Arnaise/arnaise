@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import QuestionTab from "../components/QuestionTab";
 import CustomButton from "../components/CustomButton";
 import { formatSelections, makeConjugationQuestions } from "../UTILS.js";
+import { prepareLanguageText } from "../CONSTANT.jsx";
 
 export default function Assessment(props) {
   const [questions, setQuestions] = useState([]);
@@ -55,7 +56,7 @@ export default function Assessment(props) {
           Conjugations
           <div className="my-5"></div>
           <span className="leading-tighter tracking-tighter text-_accent_1_">
-            Assessment
+            {prepareLanguageText("Assessment", "Évaluation")}
           </span>
         </h1>
       </div>

@@ -11,6 +11,7 @@ const UserData = React.createContext({
     },
     isLoggedIn: false,
     isLoaded: false,
+    language: localStorage.getItem("language") ?? "en",
   },
   setSession: () => {},
   options: {
@@ -19,6 +20,7 @@ const UserData = React.createContext({
     verbs: [],
   },
   updatePoints: () => {},
+  setToast: () => {},
 });
 
 export default UserData;

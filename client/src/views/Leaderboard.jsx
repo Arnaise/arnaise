@@ -3,7 +3,7 @@ import UserLeaderCard from "../components/UserLeaderCard";
 import ordinal from "ordinal";
 import UserData from "../contexts/UserData";
 import axios from "axios";
-import { CONSTANT } from "../CONSTANT";
+import { CONSTANT, prepareLanguageText } from "../CONSTANT";
 
 export default function Leaderboard() {
   const { session } = useContext(UserData);
@@ -47,9 +47,9 @@ export default function Leaderboard() {
     <div className="mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
       <div className="mb-5 flex flex-col w-full">
         <h1 className="text-center text-3xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
-          Leader
+          {prepareLanguageText("Leader", "Classe")}
           <span className="leading-tighter tracking-tighter text-_accent_1_">
-            board
+            {prepareLanguageText("board", "ment")}
           </span>
         </h1>
       </div>

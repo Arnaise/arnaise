@@ -17,11 +17,14 @@
     "ordinal": "^1.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.10.1",
+    "react-icons": "^4.11.0",
     "react-multi-select-component": "^4.3.4",
+    "react-qr-code": "^2.0.12",
     "react-router-dom": "^6.9.0",
     "react-use-websocket": "^4.3.1",
-    "socket.io-client": "^4.7.2"
+    "react-web-share": "^2.0.2",
+    "socket.io-client": "^4.7.2",
+    "unique-username-generator": "^1.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",

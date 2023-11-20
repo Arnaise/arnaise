@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import UserData from "../contexts/UserData";
 import Navbar from "../components/Navbar";
-import { CONSTANT, checkLoginFromNonLogin } from "../CONSTANT";
+import { CONSTANT, DEFAULT_LANGUAGE, checkLoginFromNonLogin } from "../CONSTANT";
 import BackgroundBlur from "../components/BackgroundBlur";
 import { IconContext } from "react-icons";
 import axios from "axios";
+import ToastAlert from "../components/ToastAlert";
 export default function Layout(props) {
   let navigate = useNavigate();
   // ------------------
@@ -20,8 +21,12 @@ export default function Layout(props) {
     },
     isLoggedIn: false,
     isLoaded: false,
+    language: localStorage.getItem("language") ?? DEFAULT_LANGUAGE,
   };
   const [session, setSession] = useState(__init_session);
+  const [language, setLanguage] = useState(
+    localStorage.getItem("language") ?? DEFAULT_LANGUAGE
+  );
 
   useEffect(() => {
     let sessionData = JSON.parse(localStorage.getItem("loggedin"));
@@ -72,6 +77,14 @@ export default function Layout(props) {
     );
   };
 
+  useEffect(() => {
+    localStorage.setItem("language", language);
+    setSession((prevSession) => ({
+      ...prevSession,
+      language: language,
+    }));
+  }, [language]);
+
   const [points, setPoints] = useState(0);
 
   useEffect(() => {
@@ -79,8 +92,22 @@ export default function Layout(props) {
       setPoints(session?.personal?.points);
     }
   }, [session]);
+  let TOAST__INIT__ = {
+    open: false,
+    success: true,
+    message: "",
+  };
+  const [toast, setToast] = useState(TOAST__INIT__);
 
-  const value = { session, setSession, options, updatePoints };
+  useEffect(() => {
+    if (toast.open) {
+      setTimeout(() => {
+        setToast(TOAST__INIT__);
+      }, 3000);
+    }
+  }, [toast]);
+
+  const value = { session, setSession, options, updatePoints, setToast };
   // ------------------
   // SESSION - END
   // ------------------
@@ -105,7 +132,12 @@ export default function Layout(props) {
             setSession={setSession}
             session={session}
             points={points}
+            setLanguage={setLanguage}
+            language={language}
           />
+          {toast.open && (
+            <ToastAlert success={toast.success} message={toast.message} />
+          )}
           {/* <BackgroundBlur /> */}
           <div className="mx-0 md:mx-10">{props.children}</div>
         </IconContext.Provider>

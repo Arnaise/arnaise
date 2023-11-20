@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { CONSTANT } from "../CONSTANT";
+import { CONSTANT, prepareLanguageText } from "../CONSTANT";
 import UserData from "../contexts/UserData";
 
 const JUMP = 10;
@@ -35,10 +35,10 @@ export default function Records() {
     <div className="mt-10 md:mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
       <div className="mb-5 flex flex-col w-full">
         <h1 className="text-center text-3xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
-          Recent
+          {prepareLanguageText("Recent", "Résultats")}
           <span className="mx-2"></span>
           <span className="leading-tighter tracking-tighter text-_accent_1_">
-            Records
+            {prepareLanguageText("Records", "Récents")}
           </span>
         </h1>
       </div>
@@ -49,22 +49,22 @@ export default function Records() {
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                   <th scope="col" className="px-6 py-3">
-                    Your answer
+                    {prepareLanguageText("Your answer", "votre réponse")}
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Correct answer
+                    {prepareLanguageText("Correct answer", "réponse correcte")}
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Verb
+                    {prepareLanguageText("Verb", "verbe")}
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Subject
+                    {prepareLanguageText("Subject", "sujet")}
                   </th>
                   <th scope="col" className="px-6 py-3">
-                    Tense
+                    {prepareLanguageText("Tense", "temps")}
                   </th>
                   <th scope="col" className="px-6 py-3 text-center">
-                    Points
+                    {prepareLanguageText("Points", "Points")}
                   </th>
                 </tr>
               </thead>
@@ -110,7 +110,7 @@ export default function Records() {
             aria-label="Table navigation"
           >
             <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
-              Showing{" "}
+              {prepareLanguageText("Showing", "Montrant")}{" "}
               <span className="font-semibold text-gray-900 dark:text-white">
                 {startIndex + 1}-{Math.min(endIndex, data.length)}
               </span>{" "}
@@ -130,7 +130,7 @@ export default function Records() {
                   }`}
                   disabled={page === 0}
                 >
-                  Previous
+                  {prepareLanguageText("Previous", "Précédent")}
                 </button>
               </li>
               <li>
@@ -143,7 +143,7 @@ export default function Records() {
                   }`}
                   disabled={endIndex >= data.length}
                 >
-                  Next
+                  {prepareLanguageText("Next", "Suivante")}
                 </button>
               </li>
             </ul>

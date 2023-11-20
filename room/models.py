@@ -8,7 +8,7 @@ class GameRoom(models.Model):
         CustomUsers, on_delete=models.CASCADE, null=False, blank=False
     )
     code = models.CharField(
-        max_length=16, unique=True, db_index=True, null=False, blank=False
+        max_length=6, unique=True, db_index=True, null=False, blank=False
     )
     is_active = models.BooleanField(default=False)
     start_time = models.DateTimeField(null=True, blank=True)
@@ -44,8 +44,10 @@ class GameRoom(models.Model):
 
 class Player(models.Model):
     user = models.ForeignKey(
-        CustomUsers, on_delete=models.CASCADE, null=False, blank=False
+        CustomUsers, on_delete=models.CASCADE, null=True, blank=True
     )
+    username = models.CharField(max_length=256, blank=True, null=True)
+    isGuest = models.BooleanField(default=False)
     game_room = models.ForeignKey(
         GameRoom,
         related_name="player_set",

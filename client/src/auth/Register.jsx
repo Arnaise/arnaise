@@ -78,7 +78,10 @@ const Register = () => {
   const changePayload = (e) => {
     setPayload({
       ...payload,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.name === "username"
+          ? e.target.value?.replace(" ", "")
+          : e.target.value,
     });
   };
 

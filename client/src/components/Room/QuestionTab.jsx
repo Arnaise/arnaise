@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import CustomButton from "./../CustomButton";
 import { TbHelpSquareRoundedFilled } from "react-icons/tb";
-import { setMessage, resetMessage, CONSTANT } from "../../CONSTANT";
+import { TbPlayerTrackNext } from "react-icons/tb";
+
+import {
+  setMessage,
+  resetMessage,
+  CONSTANT,
+  prepareLanguageText,
+} from "../../CONSTANT";
 import axios from "axios";
 import { MdArrowBackIosNew } from "react-icons/md";
 import { getConjugationAnswer } from "../../UTILS";
@@ -53,9 +60,9 @@ export default function QuestionTab(props) {
         props?.tense?.value,
         props?.subject
       );
-      // console.log(trueValue);
+      console.log(trueValue);
       if (!trueValue) {
-        sendProgress();
+        // sendProgress();
       }
     }
   }, [props]);
@@ -78,19 +85,19 @@ export default function QuestionTab(props) {
       isCorrect = false;
       setMessage("Wrong!", "red-500");
     }
+    if (isCorrect) {
+      sendProgress();
+      setAnswer("");
+      props?.setLoading(true);
+      if (props?.isLast) {
+        props?.stopGame();
+      }
+      props?.setLoading(false);
+    }
     setTimeout(() => {
       resetMessage();
-      if (isCorrect) {
-        sendProgress();
-        setAnswer("");
-        props?.setLoading(true);
-        if (props?.isLast) {
-          props?.stopGame();
-        }
-        props?.setLoading(false);
-      }
       setReady(true);
-    }, 2000);
+    }, 1000);
   };
 
   const sendProgress = async () => {
@@ -115,11 +122,15 @@ export default function QuestionTab(props) {
       </div>
       <div className="flex flex-row justify-evenly space-x-3 mb-10">
         <div className="flex flex-row space-x-2 justify-center items-center">
-          <span className="text-gray-500">Verb:</span>{" "}
+          <span className="text-gray-500">
+            {prepareLanguageText("Verb", "Verbe")}:
+          </span>{" "}
           <span className="">{renderBadge(props?.verb?.value)}</span>
         </div>
         <div className="flex flex-row space-x-2 justify-center items-center">
-          <span className="text-gray-500">Tense:</span>{" "}
+          <span className="text-gray-500">
+            {prepareLanguageText("Tense", "Temps")}:
+          </span>{" "}
           <span className="">{renderBadge(props?.tense?.label)}</span>
         </div>
       </div>
@@ -139,7 +150,10 @@ export default function QuestionTab(props) {
                 type="text"
                 className="border text-base rounded-lg w-full py-2 px-3 placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
                 // placeholder={`Enter the correct form of the verb for ${props?.verb?.value}.`}
-                placeholder={`Enter the correct form.`}
+                placeholder={prepareLanguageText(
+                  `Enter the correct form.`,
+                  "Entrez le bon formulaire"
+                )}
                 value={answer}
                 onChange={(e) => {
                   setAnswer(e.target.value);
@@ -154,8 +168,10 @@ export default function QuestionTab(props) {
           </div>
           <div className="">
             <CustomButton
-              label="Next"
+              label={prepareLanguageText("Next", "Suivante")}
               onClick={checkAnswer}
+              padding="mx-4"
+              icon={<TbPlayerTrackNext color="white" />}
               disabled={answer === "" || !ready}
             />
           </div>

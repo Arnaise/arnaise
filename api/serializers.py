@@ -26,6 +26,7 @@ class LogsSerializer(serializers.ModelSerializer):
         model = models.Logs
         fields = "__all__"
 
+
 class ProblemSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Problem
@@ -69,3 +70,9 @@ class ViewLogsSerializer(serializers.ModelSerializer):
         else:
             finalPoints += 5
         return finalPoints
+
+
+class CustomPresetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.CustomPreset
+        fields = "__all__"

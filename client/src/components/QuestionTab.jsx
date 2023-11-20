@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import CustomButton from "./CustomButton";
 import { TbHelpSquareRoundedFilled } from "react-icons/tb";
-import { setMessage, resetMessage, CONSTANT } from "../CONSTANT";
+import {
+  setMessage,
+  resetMessage,
+  CONSTANT,
+  prepareLanguageText,
+} from "../CONSTANT";
 import axios from "axios";
 import { MdArrowBackIosNew } from "react-icons/md";
 import { getConjugationAnswer } from "../UTILS";
+import { TbPlayerTrackNext } from "react-icons/tb";
 
 const renderBadge = (value) => {
   if (!value) {
@@ -52,19 +58,19 @@ export default function QuestionTab(props) {
 
   // Testing Start
 
-  useEffect(() => {
-    if (props?.subject && props?.verb && props?.tense) {
-      let trueValue = getConjugationAnswer(
-        props?.verb?.value,
-        props?.tense?.value,
-        props?.subject
-      );
-      // console.log(trueValue);
-      if (!trueValue) {
-        props?.chooseRandomQuestion();
-      }
-    }
-  }, [props]);
+  // useEffect(() => {
+  //   if (props?.subject && props?.verb && props?.tense) {
+  //     let trueValue = getConjugationAnswer(
+  //       props?.verb?.value,
+  //       props?.tense?.value,
+  //       props?.subject
+  //     );
+  //     console.log(trueValue);
+  //     if (!trueValue) {
+  //       props?.chooseRandomQuestion();
+  //     }
+  //   }
+  // }, [props]);
 
   // Testing End
 
@@ -84,18 +90,18 @@ export default function QuestionTab(props) {
     } else {
       isCorrect = false;
       addLog(trueValue, false);
-      setMessage("Wrong!", "red-500");
+      setMessage(prepareLanguageText("Wrong!", "Faux!"), "red-500");
+    }
+    if (isCorrect) {
+      setAnswer("");
+      props?.setLoading(true);
+      props?.chooseRandomQuestion();
+      props?.setLoading(false);
     }
     setTimeout(() => {
       resetMessage();
-      if (isCorrect) {
-        setAnswer("");
-        props?.setLoading(true);
-        props?.chooseRandomQuestion();
-        props?.setLoading(false);
-      }
       setReady(true);
-    }, 2000);
+    }, 1000);
   };
   const addLog = async (trueValue, isCorrect) => {
     if (props?.isLoggedIn) {
@@ -116,7 +122,9 @@ export default function QuestionTab(props) {
           } else {
             finalPoints += 5;
           }
-          props?.updatePoints(finalPoints);
+          if (isCorrect) {
+            props?.updatePoints(finalPoints);
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -129,17 +137,24 @@ export default function QuestionTab(props) {
     <div className="relative py-[4rem] px-5 md:px-[10rem] bg-white shadow-2xl rounded-lg">
       <div
         onClick={props?.backToHome}
-        className="cursor-pointer absolute top-[10px] left-[10px] hover:bg-gray-200 rounded-full p-3"
+        className="group transition-all duration-300 ease-in-out cursor-pointer flex flex-row justify-center items-center space-x-1 absolute top-[10px] left-[10px] hover:bg-gray-200 rounded-full p-3"
       >
-        <MdArrowBackIosNew className="text-black h-[25px] w-[25px]" />
+        <MdArrowBackIosNew className="text-gray-400 transition-all duration-300 ease-in-out group-hover:text-black md:scale-100 scale-75 h-[21px] w-[21px] md:h-[25px] md:w-[25px]" />
+        <span className="group-hover:text-black text-sm md:text-base transition-all duration-300 ease-in-out text-gray-400">
+          {prepareLanguageText("Back to menu", "Retour au menu")}
+        </span>
       </div>
       <div className="flex flex-row justify-evenly space-x-3 mb-10">
         <div className="flex flex-row space-x-2 justify-center items-center">
-          <span className="text-gray-500">Verb:</span>{" "}
+          <span className="text-gray-500">
+            {prepareLanguageText("Verb", "Verbe")}:
+          </span>{" "}
           <span className="">{renderBadge(props?.verb?.value)}</span>
         </div>
         <div className="flex flex-row space-x-2 justify-center items-center">
-          <span className="text-gray-500">Tense:</span>{" "}
+          <span className="text-gray-500">
+            {prepareLanguageText("Tense", "Temps")}:
+          </span>{" "}
           <span className="">{renderBadge(props?.tense?.label)}</span>
         </div>
       </div>
@@ -158,7 +173,10 @@ export default function QuestionTab(props) {
               <input
                 type="text"
                 className="border text-base rounded-lg w-full py-2 px-3 placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
-                placeholder={`Enter the correct form.`}
+                placeholder={prepareLanguageText(
+                  `Enter the correct form.`,
+                  "Entrez le bon formulaire"
+                )}
                 // placeholder={`Enter the correct form of the verb for ${props?.verb?.value}.`}
                 value={answer}
                 onChange={(e) => {
@@ -182,7 +200,9 @@ export default function QuestionTab(props) {
           </div>
           <div className="">
             <CustomButton
-              label="Next"
+              label={prepareLanguageText("Next", "Suivante")}
+              padding="mx-4"
+              icon={<TbPlayerTrackNext color="white" />}
               onClick={checkAnswer}
               disabled={answer === "" || !ready}
             />

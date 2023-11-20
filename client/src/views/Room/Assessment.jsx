@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import QuestionTab from "../../components/Room/QuestionTab";
-import { BG_COLORS } from "../../CONSTANT";
+import { BG_COLORS, prepareLanguageText } from "../../CONSTANT";
 
 export default function Assessment(props) {
   const [questions, setQuestions] = useState(props?.questions);
@@ -9,9 +9,13 @@ export default function Assessment(props) {
 
   useEffect(() => {
     if (props?.players?.length > 0) {
-      let current = props?.players?.find((a, b) => {
-        return parseInt(a?.id) === parseInt(props?.session?.personal?.id);
-      })?.attempt;
+      let current = props?.isGuest?.yes
+        ? props?.players?.find((a, b) => {
+            return a?.username === props?.isGuest?.username;
+          })?.attempt
+        : props?.players?.find((a, b) => {
+            return parseInt(a?.id) === parseInt(props?.session?.personal?.id);
+          })?.attempt;
       if (current >= 10) {
         current = questions.length - 1;
       }
@@ -86,11 +90,11 @@ export default function Assessment(props) {
         <h1 className="text-center text-3xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4">
           Conjugations{" "}
           <span className="leading-tighter tracking-tighter text-_accent_1_">
-            Competition
+            {prepareLanguageText("Competition", "Concours")}
           </span>
         </h1>
         <span className="text-center text-2xl text-gray-500">
-          Room#{props?.code}
+          Lobby#{props?.code}
         </span>
       </div>
       <div className="flex flex-col justify-center items-center w-full">
@@ -106,7 +110,9 @@ export default function Assessment(props) {
                 setLoading={setLoading}
                 setIndex={setIndex}
                 isLast={index === questions.length - 1}
-                isLoggedIn={props?.session?.isLoggedIn}
+                isLoggedIn={
+                  props?.isGuest?.yes ? true : props?.session?.isLoggedIn
+                }
                 userId={props?.session?.personal?.id}
                 index={index}
                 total={questions?.length}
@@ -118,7 +124,7 @@ export default function Assessment(props) {
                   <div className="flex mb-2 items-center justify-between">
                     <div>
                       <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
-                        Progress
+                        {prepareLanguageText("Progress", "Progrès")}
                       </span>
                     </div>
                     <div className="text-right">
@@ -147,8 +153,10 @@ export default function Assessment(props) {
                             width={evaluateProgress(play?.attempt)}
                             index={index}
                             isMe={
-                              parseInt(play?.id) ===
-                              parseInt(props?.session?.personal?.id)
+                              play?.isGuest
+                                ? play?.username === props?.isGuest?.username
+                                : parseInt(play?.id) ===
+                                  parseInt(props?.session?.personal?.id)
                             }
                           />
                         );

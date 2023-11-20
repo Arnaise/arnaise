@@ -36,11 +36,25 @@ export default function CustomButton(props) {
           return !old;
         });
       }}
-      className={`${
-        isLoading || (props?.disabled && "pointer-events-none opacity-70")
-      } capitalize px-4 md:px-10 py-2 rounded-lg hover:opacity-60 transition-all duration-300 ease-in-out bg-gradient-to-r from-rose-700 to-pink-600 text-white`}
+      className={`${props?.radius || "rounded-lg"} ${
+        props?.width || "w-full"
+      } ${
+        isLoading ||
+        (props?.disabled && "pointer-events-none cursor-not-allowed opacity-50")
+      } capitalize ${
+        props?.padding || "px-4 md:px-10"
+      } py-2 flex flex-row items-center justify-center space-x-2 hover:opacity-60 transition-all duration-300 ease-in-out bg-gradient-to-r from-rose-700 to-pink-600 text-white`}
     >
-      {isLoading ? <LOADING_HTML /> : props?.label}
+      {isLoading ? (
+        <LOADING_HTML />
+      ) : (
+        <>
+          {props?.icon && (
+            <span className="-translate-y-[1px]">{props?.icon}</span>
+          )}
+          {props?.label && <span>{props?.label}</span>}
+        </>
+      )}
     </button>
   );
 }

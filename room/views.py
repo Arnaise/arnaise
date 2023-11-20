@@ -23,8 +23,8 @@ def create_room(request):
     serializer = GameRoomSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_200_OK)
 
 
 @api_view(["GET", "POST"])
@@ -57,7 +57,7 @@ def get_rooms_by_user(request, user_id=None):
         except:
             return Response(
                 {"error": "Room not found."},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_200_OK,
             )
 
 

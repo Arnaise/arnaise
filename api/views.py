@@ -131,13 +131,14 @@ def logs(request, user_id=None):
             user = models.CustomUsers.objects.get(pk=int(data["user"]))
             tense = models.Tenses.objects.get(pk=int(data["tense"]))
             verb = models.Verbs.objects.get(pk=int(data["verb"]))
-            finalPoints = int(tense.points)
-            if verb.isRegular:
-                finalPoints += 2
-            else:
-                finalPoints += 5
-            user.points = int(user.points) + finalPoints
-            user.save()
+            if data["isCorrect"]:
+                finalPoints = int(tense.points)
+                if verb.isRegular:
+                    finalPoints += 2
+                else:
+                    finalPoints += 5
+                user.points = int(user.points) + finalPoints
+                user.save()
 
             return JsonResponse(
                 {"content": serializer.data}, status=status.HTTP_202_ACCEPTED
@@ -222,4 +223,66 @@ def problems(request):
             return JsonResponse({"content": {}}, status=status.HTTP_202_ACCEPTED)
         return JsonResponse(
             {"message": "Not valid data!"}, status=status.HTTP_202_ACCEPTED
+        )
+
+
+@api_view(["GET", "POST"])
+@permission_classes([])
+@authentication_classes([])
+def custom_presets(request):
+    if request.method == "GET":
+        user_id = request.GET.get("user_id")
+        if user_id:
+            custom_presets = models.CustomPreset.objects.filter(user=user_id)
+        else:
+            custom_presets = models.CustomPreset.objects.all()
+
+        serializer = serializers.CustomPresetSerializer(custom_presets, many=True)
+        return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
+
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        serializer = serializers.CustomPresetSerializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(
+                {"content": serializer.data}, status=status.HTTP_201_CREATED
+            )
+        return JsonResponse(
+            {"message": "Not valid data!"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+@api_view(["GET", "PUT", "DELETE"])
+@permission_classes([])
+@authentication_classes([])
+def custom_preset_detail(request, custom_preset_id):
+    try:
+        custom_preset = models.CustomPreset.objects.get(id=custom_preset_id)
+    except models.CustomPreset.DoesNotExist:
+        return JsonResponse(
+            {"message": "Custom Preset not found"}, status=status.HTTP_404_NOT_FOUND
+        )
+
+    if request.method == "GET":
+        serializer = serializers.CustomPresetSerializer(custom_preset)
+        return JsonResponse({"content": serializer.data}, status=status.HTTP_200_OK)
+
+    elif request.method == "PUT":
+        data = JSONParser().parse(request)
+        serializer = serializers.CustomPresetSerializer(custom_preset, data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse({"content": serializer.data}, status=status.HTTP_200_OK)
+        return JsonResponse(
+            {"message": "Not valid data!"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    elif request.method == "DELETE":
+        custom_preset.delete()
+        return JsonResponse(
+            {"message": "Custom Preset deleted successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )

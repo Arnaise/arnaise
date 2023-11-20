@@ -11,10 +11,10 @@ class GameRoomSerializer(serializers.ModelSerializer):
         read_only_fields = ["code"]
 
     def create(self, validated_data):
-        characters = string.ascii_letters + string.digits
+        characters = string.digits
         while True:
-            code = "".join(random.choice(characters) for _ in range(16))
-            if not GameRoom.objects.filter(code=code).exists():
+            code = "".join(random.choice(characters) for _ in range(6))
+            if not GameRoom.objects.filter(code=code, is_active=True).exists():
                 validated_data["code"] = code
                 room = super().create(validated_data)
                 user = validated_data["creator"]
@@ -30,7 +30,14 @@ class DisplayRoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GameRoom
-        fields = ["user_id", "created_by", "code", "timestamp", "count_of_players", "status"]
+        fields = [
+            "user_id",
+            "created_by",
+            "code",
+            "timestamp",
+            "count_of_players",
+            "status",
+        ]
 
     def get_user_id(self, obj):
         return obj.creator.id

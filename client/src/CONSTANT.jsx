@@ -21,12 +21,24 @@ export const CONSTANT = {
 //   client: "http://localhost:5173/", // CHANGE WITH YOUR FRONTEND LINK (/ is MUST IN END)
 // };
 
+export const DEFAULT_LANGUAGE = "en";
+
 export const SITE_DETAILS = {
   name: "Verbuga",
   logo: "https://www.ncl.com/sites/default/files/french_fr_horz_white.png",
   empty_profile:
     "https://media.istockphoto.com/id/1164822188/vector/male-avatar-profile-picture.jpg?s=612x612&w=0&k=20&c=KPsLgVIwEGdDvf4_kiynCXw96p_PhBjIGdU68qkpbuI=",
 };
+
+
+export const prepareLanguageText = (
+  en,
+  fr,
+  lng = localStorage.getItem("language") ?? DEFAULT_LANGUAGE
+) => {
+  return lng === "en" ? en : fr;
+};
+
 
 export const BG_COLORS = [
   "bg-gray-500",

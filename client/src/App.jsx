@@ -7,7 +7,7 @@ import TakeMeToAdmin from "./components/TakeMeToAdmin";
 import Register from "./auth/Register";
 import Records from "./views/Records";
 import Leaderboard from "./views/Leaderboard";
-import Rooms from "./views/Rooms";
+import Multiplayer from "./views/Multiplayer";
 import Lobby from "./views/Lobby";
 import Profile from "./views/Profile";
 
@@ -41,17 +41,17 @@ function App() {
             }
           />
           <Route
-            path="/rooms"
+            path="/multiplayer"
             element={
               <Layout login={true}>
-                <Rooms />
+                <Multiplayer />
               </Layout>
             }
           />
           <Route
-            path="/room/:code"
+            path="/join/:code"
             element={
-              <Layout login={true}>
+              <Layout>
                 <Lobby />
               </Layout>
             }
@@ -67,6 +67,14 @@ function App() {
           <Route path="/admin" element={<TakeMeToAdmin />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route
+            path="*"
+            element={
+              <Layout>
+                <Home />
+              </Layout>
+            }
+          />
         </Routes>
       </Router>
     </div>

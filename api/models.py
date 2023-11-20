@@ -113,3 +113,23 @@ class Problem(models.Model):
 
     def __str__(self):
         return f"{self.text}"
+
+
+class CustomPreset(models.Model):
+    user = models.ForeignKey(
+        CustomUsers,
+        on_delete=models.CASCADE,
+    )
+    name = models.CharField(
+        max_length=50, help_text="Preset name.", null=True, blank=True
+    )
+    tenses = models.ManyToManyField("Tenses", null=True, blank=True)
+    regularVerbs = models.ManyToManyField(
+        "Verbs", related_name="regular_preset", null=True, blank=True
+    )
+    irregularVerbs = models.ManyToManyField(
+        "Verbs", related_name="irregular_preset", null=True, blank=True
+    )
+
+    def __str__(self):
+        return f"Custom Preset for {self.user.username}"
