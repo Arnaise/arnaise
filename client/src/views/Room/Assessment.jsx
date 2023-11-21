@@ -90,7 +90,7 @@ export default function Assessment(props) {
         <h1 className="text-center text-3xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4">
           Conjugations{" "}
           <span className="leading-tighter tracking-tighter text-_accent_1_">
-            {prepareLanguageText("Competition", "Concours")}
+            {prepareLanguageText("Competition", "Compétition")}
           </span>
         </h1>
         <span className="text-center text-2xl text-gray-500">

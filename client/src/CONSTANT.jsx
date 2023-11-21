@@ -1,4 +1,5 @@
 import axios from "axios";
+import logo from "./assets/logo.png";
 
 export const CONSTANT = {
   server: "https://verbl.be/", // CHANGE WITH YOUR BACKEND LINK (/ is MUST IN END)
@@ -24,12 +25,11 @@ export const CONSTANT = {
 export const DEFAULT_LANGUAGE = "en";
 
 export const SITE_DETAILS = {
-  name: "Verbuga",
-  logo: "https://www.ncl.com/sites/default/files/french_fr_horz_white.png",
+  name: "Verbl",
+  logo: logo,
   empty_profile:
     "https://media.istockphoto.com/id/1164822188/vector/male-avatar-profile-picture.jpg?s=612x612&w=0&k=20&c=KPsLgVIwEGdDvf4_kiynCXw96p_PhBjIGdU68qkpbuI=",
 };
-
 
 export const prepareLanguageText = (
   en,
@@ -38,7 +38,6 @@ export const prepareLanguageText = (
 ) => {
   return lng === "en" ? en : fr;
 };
-
 
 export const BG_COLORS = [
   "bg-gray-500",

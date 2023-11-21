@@ -17,8 +17,7 @@ import QRCode from "react-qr-code";
 import { FaCopy } from "react-icons/fa";
 import { RWebShare } from "react-web-share";
 import { IoShareSocial } from "react-icons/io5";
-
-
+import { IoIosArrowDown } from "react-icons/io";
 const RenderBadge = (props) => {
   return (
     <span
@@ -52,7 +51,10 @@ const ShareRoom = ({ code, setToast }) => {
       </h2>
       <div className="flex flex-col space-y-5">
         <div className="w-full">
-          <QRCode value={`${CONSTANT.client}join/${code}`} className="md:w-fit w-full"/>
+          <QRCode
+            value={`${CONSTANT.client}join/${code}`}
+            className="md:w-fit w-full"
+          />
         </div>
         <CustomButton
           label={prepareLanguageText("Copy Invite", "Copier l'invitation")}
@@ -96,71 +98,89 @@ const ShareRoom = ({ code, setToast }) => {
 };
 
 const RoomDetails = ({ room, readyState, count }) => {
+  const [openDetails, setOpenDetails] = useState(false);
   return (
     <div className="w-full">
-      <h2 className="text-3xl font-bold mb-4">
+      <h2 className="text-3xl flex transition-all duration-300 ease-in-out flex-row items-center md:text-3xl font-bold mb-4">
         {prepareLanguageText("Details", "Détails")}
-      </h2>
-      <span className="flex md:flex-row flex-col space-y-3 md:space-y-0 mb-2">
-        <RenderBadge
-          label={prepareLanguageText("Created by", "Créé par")}
-          value={room?.created_by}
-        />
-        <RenderBadge
-          label={prepareLanguageText("Created at", "Créé à")}
-          value={new Date(room?.timestamp).toLocaleString()}
-        />
-        <RenderBadge
-          label={prepareLanguageText("Players Count", "Les joueurs comptent")}
-          value={count || room?.count_of_players}
-        />
-      </span>
-      <div className="flex md:flex-row flex-col space-y-3 md:space-y-0 mt-3">
         <span
-          className={`${
-            room?.status === "Expired"
-              ? "bg-red-100 text-red-800"
-              : "bg-emerald-100 text-emerald-800"
-          } cursor-pointer w-fit text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300`}
+          onClick={() => {
+            setOpenDetails(!openDetails);
+          }}
+          className="ml-1 select-none hover:bg-gray-200 rounded-full p-2 cursor-pointer"
         >
-          {prepareLanguageText("Lobby Status", "Statut du lobby")}:{" "}
-          <span className="font-bold">{room?.status}</span>
+          <IoIosArrowDown
+            color="black"
+            className={`${
+              openDetails && "rotate-180"
+            } text-black transition-all duration-300 ease-in-out`}
+          />
         </span>
-        {readyState ? (
+      </h2>
+      <div
+        className={`${openDetails ? "h-full opacity-100" : "h-0 opacity-0"}`}
+      >
+        <span className="flex md:flex-row flex-col space-y-3 md:space-y-0 mb-2">
+          <RenderBadge
+            label={prepareLanguageText("Created by", "Créé par")}
+            value={room?.created_by}
+          />
+          <RenderBadge
+            label={prepareLanguageText("Created at", "Créé à")}
+            value={new Date(room?.timestamp).toLocaleString()}
+          />
+          <RenderBadge
+            label={prepareLanguageText("Players Count", "Nombre de joueurs")}
+            value={count || room?.count_of_players}
+          />
+        </span>
+        <div className="flex md:flex-row flex-col space-y-3 md:space-y-0 mt-3">
           <span
             className={`${
-              readyState === 0
-                ? "bg-blue-100 text-blue-800"
-                : readyState === 1
-                ? "bg-emerald-100 text-emerald-800"
-                : readyState === 2
-                ? "bg-blue-100 text-blue-800"
-                : readyState === 3
+              room?.status === "Expired"
                 ? "bg-red-100 text-red-800"
-                : "bg-blue-100 text-blue-800"
-            } w-fit cursor-pointer text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300`}
+                : "bg-emerald-100 text-emerald-800"
+            } cursor-pointer w-fit text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300`}
           >
-            {prepareLanguageText("Server Status", "Statut du serveur")}:{" "}
-            <span className="font-bold">
-              {readyState === 0
-                ? "Connecting"
-                : readyState === 1
-                ? "Connected"
-                : readyState === 2
-                ? "Closing"
-                : readyState === 3
-                ? "Closed"
-                : ""}
+            {prepareLanguageText("Lobby Status", "Statut du lobby")}:{" "}
+            <span className="font-bold">{room?.status}</span>
+          </span>
+          {readyState ? (
+            <span
+              className={`${
+                readyState === 0
+                  ? "bg-blue-100 text-blue-800"
+                  : readyState === 1
+                  ? "bg-emerald-100 text-emerald-800"
+                  : readyState === 2
+                  ? "bg-blue-100 text-blue-800"
+                  : readyState === 3
+                  ? "bg-red-100 text-red-800"
+                  : "bg-blue-100 text-blue-800"
+              } w-fit cursor-pointer text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300`}
+            >
+              {prepareLanguageText("Server Status", "Statut du serveur")}:{" "}
+              <span className="font-bold">
+                {readyState === 0
+                  ? "Connecting"
+                  : readyState === 1
+                  ? "Connected"
+                  : readyState === 2
+                  ? "Closing"
+                  : readyState === 3
+                  ? "Closed"
+                  : ""}
+              </span>
             </span>
-          </span>
-        ) : (
-          <span
-            className={`bg-blue-100 text-blue-800 w-fit cursor-pointer text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300`}
-          >
-            {prepareLanguageText("Server Status", "Statut du serveur")}:{" "}
-            <span className="font-bold">Connecting</span>
-          </span>
-        )}
+          ) : (
+            <span
+              className={`bg-blue-100 text-blue-800 w-fit cursor-pointer text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300`}
+            >
+              {prepareLanguageText("Server Status", "Statut du serveur")}:{" "}
+              <span className="font-bold">Connecting</span>
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -224,9 +244,7 @@ const UserComponent = ({
 const PlayersTab = ({ players, online, label, creator }) => {
   return (
     <div className="flex flex-col">
-      <h2 className="text-3xl font-bold mb-4 capitalize">
-        {`${label} ${prepareLanguageText("Players", "Joueurs")}`}
-      </h2>
+      <h2 className="text-3xl font-bold mb-4 capitalize">{`${label}`}</h2>
       <div className="flex flex-row items-center flex-wrap">
         {players.map((player, index) => (
           <UserComponent
@@ -541,9 +559,15 @@ export default function Lobby() {
       <div className="mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
         <div className="mb-5 flex flex-col w-full">
           <h1 className="flex flex-col md:flex-row items-center justify-center text-3xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4">
-            Lobby
-            <span className="leading-tighter tracking-tighter text-_accent_1_">
-              #{code}
+            {prepareLanguageText("Code for the", "Code pour le")}
+            <span className="leading-tighter tracking-tighter ml-2 text-_accent_1_">
+              Lobby
+            </span>
+          </h1>
+          <h1 className="flex flex-col md:flex-row items-center justify-center text-3xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4">
+            #
+            <span className="leading-tighter tracking-normal text-_accent_1_">
+              {code}
             </span>
           </h1>
         </div>
@@ -565,7 +589,7 @@ export default function Lobby() {
                     parseInt(session?.personal?.id) ===
                       parseInt(room?.user_id) &&
                     socket && (
-                      <div className="w-fit mt-10">
+                      <div className="w-fit mt-5">
                         <CustomButton
                           label={prepareLanguageText("Start Game", "Commencez")}
                           icon={<VscDebugStart color="white" />}
@@ -585,7 +609,10 @@ export default function Lobby() {
                           })}
                           online={true}
                           creator={room?.created_by}
-                          label={prepareLanguageText("Online", "En ligne")}
+                          label={prepareLanguageText(
+                            "Online Players",
+                            "Joueurs en ligne"
+                          )}
                         />
                       </div>
                       <div className="w-full flex flex-row mt-10">
@@ -595,7 +622,10 @@ export default function Lobby() {
                           })}
                           online={false}
                           creator={room?.created_by}
-                          label={prepareLanguageText("Offline", "Hors ligne")}
+                          label={prepareLanguageText(
+                            "Offline Players",
+                            "Joueurs Hors ligne"
+                          )}
                         />
                       </div>
                     </>

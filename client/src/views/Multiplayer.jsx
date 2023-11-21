@@ -67,7 +67,7 @@ const RoomCard = ({
         </span>
         <p>
           <span className={`${isProgress ? "text-gray-200" : "text-gray-500"}`}>
-            {prepareLanguageText("Players Count", "Les joueurs comptent")}:
+            {prepareLanguageText("Players Count", "Nombre de joueurs")}:
           </span>{" "}
           {room?.count_of_players || 0}
         </p>

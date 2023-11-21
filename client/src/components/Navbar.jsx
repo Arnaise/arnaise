@@ -88,45 +88,57 @@ export default function Navbar(props) {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <div className="flex flex-row items-center">
           <Link to="/" className="flex items-center">
-            <img
-              src={SITE_DETAILS.logo}
-              className="h-8 mr-3 invert-[100]"
-              alt="Verbuga"
-            />
+            <img src={SITE_DETAILS.logo} className="h-9 mr-3" alt="Verbl" />
             {SITE_DETAILS.logo === "" && (
               <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
                 {SITE_DETAILS.name}
               </span>
             )}
           </Link>
-          <div className="flex items-start space-x-3 relative text-white z-30">
+          <div className="flex items-start space-x-1 relative text-black z-30">
             <span
               className="h-fit"
               onClick={() => {
                 props?.setLanguage("en");
               }}
             >
-              <img
+              {/* <img
                 src={"/assets/uk.png"}
                 alt=""
                 className={`${
                   props?.language === "en" ? "" : "grayscale"
                 } w-6 h-6  cursor-pointer transition ease-out hover:animate-pulse delay-500 hover:delay-500 `}
-              />
+              /> */}
+              <span
+                className={`cursor-pointer ${
+                  props?.language === "en" ? "" : "text-gray-500"
+                } `}
+              >
+                EN
+              </span>
             </span>
+
+            <span>|</span>
 
             <span
               onClick={() => {
                 props?.setLanguage("fr");
               }}
             >
-              <img
+              {/* <img
                 src={"/assets/fr.png"}
                 alt=""
                 className={`${
                   props?.language === "fr" ? "" : "grayscale"
                 } w-6 h-6 cursor-pointer transition ease-out hover:animate-pulse delay-500 hover:delay-500`}
-              />
+              /> */}
+              <span
+                className={`cursor-pointer ${
+                  props?.language === "fr" ? "" : "text-gray-500"
+                } `}
+              >
+                FR
+              </span>
             </span>
           </div>
         </div>

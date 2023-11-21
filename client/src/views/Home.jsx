@@ -341,7 +341,7 @@ export default function Home() {
             <span className="leading-tighter tracking-tighter text-_accent_1_">
               {prepareLanguageText(
                 "French Conjugations",
-                "conjugations françaises"
+                "conjugaisons françaises"
               )}
             </span>
           </h1>
@@ -411,7 +411,7 @@ export default function Home() {
                 <span className="capitalize text-base font-semibold text-slate-500 tracking-tighter leading-relaxed">
                   {prepareLanguageText(
                     "Custom Presets",
-                    "Préréglages personnalisés"
+                    "Préléglases"
                   )}
                 </span>
                 <select

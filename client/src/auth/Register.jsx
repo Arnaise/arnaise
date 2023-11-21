@@ -90,7 +90,7 @@ const Register = () => {
       <div className="px-5 md:px-0 w-full md:w-1/3 backdrop-blur-3xl rounded-3xl bg-white/30 px-20 py-10">
         <div className="mb-5 flex justify-center items-center">
           <Link to="/">
-            <img src={SITE_DETAILS.logo} className="invert-[100] w-[8rem]" />
+            <img src={SITE_DETAILS.logo} className="w-[8rem]" />
           </Link>
         </div>
         <h1 className="text-center text-5xl font-extrabold leading-tight tracking-tight">

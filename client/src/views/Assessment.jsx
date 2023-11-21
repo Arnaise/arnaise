@@ -53,7 +53,7 @@ export default function Assessment(props) {
     <div className="mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
       <div className="mb-5 flex flex-col w-full">
         <h1 className="text-center text-3xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
-          Conjugations
+          {prepareLanguageText("Conjugations", "Conjugaisons")}
           <div className="my-5"></div>
           <span className="leading-tighter tracking-tighter text-_accent_1_">
             {prepareLanguageText("Assessment", "Évaluation")}
