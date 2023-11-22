@@ -565,7 +565,6 @@ export default function Lobby() {
             </span>
           </h1>
           <h1 className="flex flex-col md:flex-row items-center justify-center text-3xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4">
-            #
             <span className="leading-tighter tracking-normal text-_accent_1_">
               {code}
             </span>
