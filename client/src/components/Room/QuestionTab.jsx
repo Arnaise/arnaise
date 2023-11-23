@@ -8,6 +8,7 @@ import {
   resetMessage,
   CONSTANT,
   prepareLanguageText,
+  TESTING_ANSWERS,
 } from "../../CONSTANT";
 import axios from "axios";
 import { MdArrowBackIosNew } from "react-icons/md";
@@ -54,7 +55,7 @@ export default function QuestionTab(props) {
   // Testing Start
 
   useEffect(() => {
-    if (props?.subject && props?.verb && props?.tense) {
+    if (props?.subject && props?.verb && props?.tense && TESTING_ANSWERS) {
       let trueValue = getConjugationAnswer(
         props?.verb?.value,
         props?.tense?.value,
@@ -114,71 +115,75 @@ export default function QuestionTab(props) {
   const [answer, setAnswer] = useState("");
 
   return (
-    <div className="relative py-[4rem] px-5 md:px-[10rem] bg-white shadow-2xl rounded-lg">
-      <div className="cursor-pointer absolute top-[10px] left-[10px] p-3">
+    <div className="bg-white shadow-2xl rounded-lg">
+      {/* <div className="cursor-pointer absolute top-[10px] left-[10px] p-3">
         <span className="text-sm font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
           {props?.index + 1}/{props?.total}
         </span>
-      </div>
-      <div className="flex flex-row justify-evenly space-x-3 mb-10">
-        <div className="flex flex-row space-x-2 justify-center items-center">
-          <span className="text-gray-500">
-            {prepareLanguageText("Verb", "Verbe")}:
-          </span>{" "}
-          <span className="">{renderBadge(props?.verb?.value)}</span>
-        </div>
-        <div className="flex flex-row space-x-2 justify-center items-center">
-          <span className="text-gray-500">
-            {prepareLanguageText("Tense", "Temps")}:
-          </span>{" "}
-          <span className="">{renderBadge(props?.tense?.label)}</span>
-        </div>
-      </div>
-
-      <div className="mb-6">
-        <div className="flex items-center justify-between space-x-3">
-          <div className="py-2 px-3 rounded-lg bg-green-100 capitalize text-green-800 text-base font-medium">
-            {props?.subject?.label || (
-              <span className="bg-green-100 flex w-fit justify-center items-center capitalize text-green-800 text-md font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-                {LOADING_HTML()}
-              </span>
-            )}
+        
+      </div> */}
+      <div className="px-5 py-2">{props?.progressHTML}</div>
+      <div className="pb-[2rem] pt-[3rem] px-5 md:px-[6rem] lg:px-[8rem] xl:px-[10rem]">
+        <div className="flex flex-row justify-evenly space-x-3 mb-10">
+          <div className="flex flex-row space-x-2 justify-center items-center">
+            <span className="text-gray-500">
+              {prepareLanguageText("Verb", "Verbe")}:
+            </span>{" "}
+            <span className="">{renderBadge(props?.verb?.value)}</span>
           </div>
-          <div className="flex-grow">
-            <div className="relative">
-              <input
-                type="text"
-                className="border text-base rounded-lg w-full py-2 px-3 placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
-                // placeholder={`Enter the correct form of the verb for ${props?.verb?.value}.`}
-                placeholder={prepareLanguageText(
-                  `Enter the correct form.`,
-                  "Entrez le bon formulaire"
-                )}
-                value={answer}
-                onChange={(e) => {
-                  setAnswer(e.target.value);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && answer !== "" && ready) {
-                    checkAnswer(e);
-                  }
-                }}
+          <div className="flex flex-row space-x-2 justify-center items-center">
+            <span className="text-gray-500">
+              {prepareLanguageText("Tense", "Temps")}:
+            </span>{" "}
+            <span className="">{renderBadge(props?.tense?.label)}</span>
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <div className="flex items-center justify-between space-x-3">
+            <div className="py-2 px-3 rounded-lg bg-green-100 capitalize text-green-800 text-base font-medium">
+              {props?.subject?.label || (
+                <span className="bg-green-100 flex w-fit justify-center items-center capitalize text-green-800 text-md font-medium px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
+                  {LOADING_HTML()}
+                </span>
+              )}
+            </div>
+            <div className="flex-grow">
+              <div className="relative">
+                <input
+                  type="text"
+                  className="border text-base rounded-lg w-full py-2 px-3 placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
+                  // placeholder={`Enter the correct form of the verb for ${props?.verb?.value}.`}
+                  placeholder={prepareLanguageText(
+                    `Enter the correct form.`,
+                    "Entrez le bon formulaire"
+                  )}
+                  value={answer}
+                  onChange={(e) => {
+                    setAnswer(e.target.value);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && answer !== "" && ready) {
+                      checkAnswer(e);
+                    }
+                  }}
+                />
+              </div>
+            </div>
+            <div className="">
+              <CustomButton
+                label={prepareLanguageText("Next", "Suivante")}
+                onClick={checkAnswer}
+                padding="mx-4"
+                icon={<TbPlayerTrackNext color="white" />}
+                disabled={answer === "" || !ready}
               />
             </div>
           </div>
-          <div className="">
-            <CustomButton
-              label={prepareLanguageText("Next", "Suivante")}
-              onClick={checkAnswer}
-              padding="mx-4"
-              icon={<TbPlayerTrackNext color="white" />}
-              disabled={answer === "" || !ready}
-            />
-          </div>
         </div>
-      </div>
 
-      <div className="text-center mt-10 text-2xl" id="error"></div>
+        <div className="text-center mt-10 text-2xl" id="error"></div>
+      </div>
     </div>
   );
 }

@@ -241,7 +241,7 @@ const UserComponent = ({
   );
 };
 
-const PlayersTab = ({ players, online, label, creator }) => {
+const PlayersTab = ({ players, online, label, creator, isExpired = false }) => {
   return (
     <div className="flex flex-col">
       <h2 className="text-3xl font-bold mb-4 capitalize">{`${label}`}</h2>
@@ -252,7 +252,7 @@ const PlayersTab = ({ players, online, label, creator }) => {
             user={player}
             online={online}
             creator={creator}
-            isExpired={label === ""}
+            isExpired={isExpired}
             isGuest={player?.isGuest}
             index={index}
           />
@@ -286,8 +286,22 @@ export default function Lobby() {
       setSocket(newSocket);
       console.log(`Connected to server.`);
     };
-    newSocket.onclose = () => {
-      console.log(`Connection closed...`);
+    newSocket.onclose = (e) => {
+      console.log(
+        "Connection is closed. Reconnect will be attempted in 1 second.",
+        e.reason
+      );
+      // setTimeout(function () {
+      //   setupWebSocket();
+      // }, 1000);
+    };
+    newSocket.onerror = function (err) {
+      console.error(
+        "Socket encountered error: ",
+        err.message,
+        "Closing socket"
+      );
+      newSocket.close();
     };
     newSocket.onmessage = (e) => {
       let data = JSON.parse(e.data);
@@ -311,6 +325,12 @@ export default function Lobby() {
 
   useEffect(() => {
     setupWebSocket();
+
+    // setInterval(() => {
+    //   if (!socket) {
+    //     setupWebSocket();
+    //   }
+    // }, 10 * 1000);
   }, []);
 
   const fetchRoom = async () => {
@@ -338,38 +358,42 @@ export default function Lobby() {
 
   useEffect(() => {
     if (
-      session.isLoaded &&
-      session.isLoggedIn &&
+      session?.isLoaded &&
+      session?.isLoggedIn &&
       socket &&
-      socket.readyState === 1
+      socket?.readyState === 1
     ) {
-      socket.send(
+      socket?.send(
         ecm("join", {
           user_id: session?.personal?.id,
         })
       );
     } else if (
-      session.isLoaded &&
-      !session.isLoggedIn &&
+      session?.isLoaded &&
+      !session?.isLoggedIn &&
       socket &&
-      socket.readyState === 1 &&
+      socket?.readyState === 1 &&
       room &&
-      room?.status !== "Expired"
+      room?.status !== "Expired" &&
+      !isGuest.yes
     ) {
-      socket.send(ecm("get_status", ""));
+      socket?.send(ecm("get_status", ""));
       setModal({
         ...modal,
         open: true,
       });
-    } else if (session.isLoaded && socket && socket.readyState === 1) {
-      socket.send(ecm("get_status", ""));
+    } else if (session?.isLoaded && socket && socket?.readyState === 1) {
+      socket?.send(ecm("get_status", ""));
     }
+  }, [socket, session, room]);
+
+  useEffect(() => {
     return () => {
       if (socket) {
         socket?.close();
       }
     };
-  }, [socket, session, room]);
+  }, [socket]);
 
   const stopGame = () => {
     socket.send(ecm("end", ""));
@@ -483,7 +507,7 @@ export default function Lobby() {
   return (
     <>
       <ModalWrapper big isOpen={modal.open} onClose={() => {}}>
-        <div>
+        <div className="">
           <h1 className="text-left flex flex-col text-xl font-extrabold leading-tight tracking-tight">
             <span className="leading-tighter tracking-tighter bg-clip-text text-black">
               {prepareLanguageText(
@@ -556,8 +580,8 @@ export default function Lobby() {
           <div className="mt-2" id="error" style={{ display: "none" }}></div>
         </div>
       </ModalWrapper>
-      <div className="mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
-        <div className="mb-5 flex flex-col w-full">
+      <div className="mt-10 xl:mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
+        <div className="mb-0 xl:mb-5 flex flex-col w-full">
           <h1 className="flex flex-col md:flex-row items-center justify-center text-3xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4">
             {prepareLanguageText("Code for the", "Code pour le")}
             <span className="leading-tighter tracking-tighter ml-2 text-_accent_1_">
@@ -636,16 +660,19 @@ export default function Lobby() {
                           players={online}
                           online={false}
                           creator={room?.created_by}
-                          label={""}
+                          label={prepareLanguageText("Players", "Joueurs")}
+                          isExpired={true}
                         />
                       </div>
                     </>
                   )}
                 </div>
-                <div className="w-full md:w-1/3 mb-7 md:mb-0">
-                  {/* Render Share tab */}
-                  <ShareRoom code={code} setToast={setToast} />
-                </div>
+                {room?.status !== "Expired" && (
+                  <div className="w-full md:w-1/3 mb-7 md:mb-0">
+                    {/* Render Share tab */}
+                    <ShareRoom code={code} setToast={setToast} />
+                  </div>
+                )}
               </div>
             )}
           </div>

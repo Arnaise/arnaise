@@ -333,21 +333,20 @@ export default function Home() {
           <div className="mt-2" id="error" style={{ display: "none" }}></div>
         </div>
       </ModalWrapper>
-      <div className="mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
-        <div className="mb-5 flex flex-col w-full">
-          <h1 className="text-center text-3xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
+      <div className="mt-10 xl:mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
+        <div className="mb-0 xl:mb-0 xl:mb-5 flex flex-col w-full">
+          <h1 className="text-center text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight tracking-tight mb-4">
             {prepareLanguageText("Master", "Pratiquez les")}
-            <div className="my-5"></div>
-            <span className="leading-tighter tracking-tighter text-_accent_1_">
+            <span className="leading-tighter tracking-tighter ml-2 text-_accent_1_">
               {prepareLanguageText(
                 "French Conjugations",
-                "conjugaisons françaises"
+                "conjugaisons"
               )}
             </span>
           </h1>
         </div>
         <div className="flex flex-col justify-center items-center w-full">
-          <div className="px-5 md:px-0 md:w-full lg:w-2/3 xl:w-2/3 w-full flex flex-col md:flex-row md:space-x-10">
+          <div className="px-5 md:px-0 md:w-full lg:w-3/4 xl:w-2/3 w-full flex flex-col md:flex-row md:space-x-10">
             <MultipleSelect
               mainLabel={prepareLanguageText("tenses", "Temps")}
               label="Ex. Imparfait"
@@ -408,7 +407,7 @@ export default function Home() {
             />
             {session?.isLoggedIn && (
               <div className={`mt-3 w-full`}>
-                <span className="capitalize text-base font-semibold text-slate-500 tracking-tighter leading-relaxed">
+                <span className="capitalize whitespace-nowrap text-base font-semibold text-slate-500 tracking-tighter leading-relaxed">
                   {prepareLanguageText(
                     "Custom Presets",
                     "Préléglases"
@@ -419,16 +418,16 @@ export default function Home() {
                     "Select custom preset",
                     "Sélectionnez un préréglage personnalisé"
                   )}
-                  value={selection?.customPreset}
+                  defaultValue={selection?.customPreset}
                   onChange={(e) => {
                     changeSelectionViaPreset(e.target.value);
                   }}
                   className={`${
                     !selection?.customPreset ? "text-[#aaa]" : "text-black"
-                  } w-full bg-white transition-all duration-300 ease-in-out rounded-[4px] focus:outline-none outline-none border border-[#aaa] ring-0 focus:ring-0`}
+                  } w-full h-[40px] bg-white transition-all duration-300 ease-in-out rounded-[4px] focus:outline-none outline-none border border-[#ccc] ring-0 focus:ring-0`}
                 >
                   {
-                    <option className="text-black" value={""} selected>
+                    <option className="text-black" value={""}>
                       {prepareLanguageText(
                         "Select custom preset",
                         "Sélectionnez un préréglage personnalisé"
@@ -601,9 +600,9 @@ export default function Home() {
             )}
           </div>
         </div>
-        <hr class="md:w-2/4 w-full h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700" />
+        <hr className="md:w-2/4 w-full h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700" />
         <section className="mb-10 w-full">
-          <h1 className="text-center text-3xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
+          <h1 className="text-center text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight tracking-tight mb-4">
             {prepareLanguageText("Join", "Rejoindre le")}
             <span className="leading-tighter ml-2 tracking-tighter text-_accent_1_">
               Lobby

@@ -6,6 +6,7 @@ import {
   resetMessage,
   CONSTANT,
   prepareLanguageText,
+  TESTING_ANSWERS,
 } from "../CONSTANT";
 import axios from "axios";
 import { MdArrowBackIosNew } from "react-icons/md";
@@ -58,19 +59,19 @@ export default function QuestionTab(props) {
 
   // Testing Start
 
-  // useEffect(() => {
-  //   if (props?.subject && props?.verb && props?.tense) {
-  //     let trueValue = getConjugationAnswer(
-  //       props?.verb?.value,
-  //       props?.tense?.value,
-  //       props?.subject
-  //     );
-  //     console.log(trueValue);
-  //     if (!trueValue) {
-  //       props?.chooseRandomQuestion();
-  //     }
-  //   }
-  // }, [props]);
+  useEffect(() => {
+    if (props?.subject && props?.verb && props?.tense && TESTING_ANSWERS) {
+      let trueValue = getConjugationAnswer(
+        props?.verb?.value,
+        props?.tense?.value,
+        props?.subject
+      );
+      console.log(trueValue);
+      if (!trueValue) {
+        props?.chooseRandomQuestion();
+      }
+    }
+  }, [props]);
 
   // Testing End
 
@@ -134,7 +135,7 @@ export default function QuestionTab(props) {
   const [answer, setAnswer] = useState("");
 
   return (
-    <div className="relative py-[4rem] px-5 md:px-[10rem] bg-white shadow-2xl rounded-lg">
+    <div className="relative py-[4rem] px-5 md:px-[6rem] lg:px-[8rem] xl:px-[10rem] bg-white shadow-2xl rounded-lg">
       <div
         onClick={props?.backToHome}
         className="group transition-all duration-300 ease-in-out cursor-pointer flex flex-row justify-center items-center space-x-1 absolute top-[10px] left-[10px] hover:bg-gray-200 rounded-full p-3"

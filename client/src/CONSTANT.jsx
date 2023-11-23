@@ -23,6 +23,7 @@ export const CONSTANT = {
 // };
 
 export const DEFAULT_LANGUAGE = "en";
+export const TESTING_ANSWERS = false;
 
 export const SITE_DETAILS = {
   name: "Verbl",

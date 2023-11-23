@@ -83,6 +83,7 @@ const RoomCard = ({
           </span>{" "}
           {new Date(room?.timestamp).toLocaleString()}
         </p>
+        <div className="py-3"></div>
         {isCopy && (
           <span
             onClick={(e) => {
@@ -166,9 +167,9 @@ const Multiplayer = () => {
   }, [session]);
 
   return (
-    <div className="mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
-      <div className="mb-5 flex flex-col w-full">
-        <h1 className="text-center text-3xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4">
+    <div className="mt-10 xl:mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
+      <div className="mb-0 xl:mb-5 flex flex-col w-full">
+        <h1 className="text-center text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight tracking-tight mb-4">
           Multi
           <span className="leading-tighter tracking-tighter text-_accent_1_">
             player

@@ -9,17 +9,22 @@ export default function Assessment(props) {
 
   useEffect(() => {
     if (props?.players?.length > 0) {
+      // console.log("Guest:", props?.isGuest);
+      // console.log("Session:", props?.session);
       let current = props?.isGuest?.yes
         ? props?.players?.find((a, b) => {
             return a?.username === props?.isGuest?.username;
           })?.attempt
-        : props?.players?.find((a, b) => {
+        : props?.session?.isLoggedIn
+        ? props?.players?.find((a, b) => {
             return parseInt(a?.id) === parseInt(props?.session?.personal?.id);
-          })?.attempt;
+          })?.attempt
+        : 0;
+      // console.log("Current:", current || 0);
       if (current >= 10) {
         current = questions.length - 1;
       }
-      setIndex(current);
+      setIndex(current || 0);
     }
     setLoading(false);
   }, [props]);
@@ -85,21 +90,20 @@ export default function Assessment(props) {
   };
 
   return (
-    <div className="mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
+    <div className="mt-10 xl:mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
       <div className="mb-5 flex flex-col w-full">
-        <h1 className="text-center text-3xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4">
-          Conjugations{" "}
+        <h1 className="text-center text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold leading-tight tracking-tight mb-4">
+          {/* {prepareLanguageText("Conjugations", "Conjugaisons")}{" "} */}
+          {prepareLanguageText("Competition", "Compétition")}{" "}
           <span className="leading-tighter tracking-tighter text-_accent_1_">
-            {prepareLanguageText("Competition", "Compétition")}
+            {prepareLanguageText("Code", "Code")} {props?.code}
           </span>
         </h1>
-        <span className="text-center text-2xl text-gray-500">
-          Lobby#{props?.code}
-        </span>
+        {/* <span className="text-center text-2xl text-gray-500">Lobby#{props?.code}</span> */}
       </div>
       <div className="flex flex-col justify-center items-center w-full">
         <div className="px-5 md:px-0 w-full md:w-2/3">
-          {loading ? (
+          {loading && questions.length <= 0 ? (
             <LOADING_HTML />
           ) : (
             <>
@@ -118,52 +122,55 @@ export default function Assessment(props) {
                 total={questions?.length}
                 stopGame={props?.stopGame}
                 updateProgress={props?.updateProgress}
+                progressHTML={
+                  <div className="relative pt-1">
+                    <div className="flex mb-2 items-center justify-between">
+                      <div>
+                        <span className="mr-1 text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
+                          {prepareLanguageText("Progress", "Progrès")}
+                        </span>
+                        <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
+                          {index + 1}/{questions?.length}
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-xs font-semibold inline-block text-blue-600">
+                          {`${evaluateProgress(
+                            props?.players?.find((a, b) => {
+                              return (
+                                parseInt(a?.id) ===
+                                parseInt(props?.session?.personal?.id)
+                              );
+                            })?.attempt || 0
+                          )}%`}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="relative h-2 mb-4 text-xs flex rounded bg-blue-200">
+                      {props?.players
+                        ?.filter((a, b) => {
+                          return a?.isInLobby;
+                        })
+                        ?.map((play, index) => {
+                          return (
+                            <PROGRESS_LINE
+                              key={play?.id}
+                              name={play?.username}
+                              width={evaluateProgress(play?.attempt)}
+                              index={index}
+                              isMe={
+                                play?.isGuest
+                                  ? play?.username === props?.isGuest?.username
+                                  : parseInt(play?.id) ===
+                                    parseInt(props?.session?.personal?.id)
+                              }
+                            />
+                          );
+                        })}
+                    </div>
+                  </div>
+                }
               />
-              <div className="mt-10 py-10 px-4 md:px-10 bg-white shadow-2xl rounded-lg">
-                <div className="relative pt-1">
-                  <div className="flex mb-2 items-center justify-between">
-                    <div>
-                      <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
-                        {prepareLanguageText("Progress", "Progrès")}
-                      </span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-xs font-semibold inline-block text-blue-600">
-                        {`${evaluateProgress(
-                          props?.players?.find((a, b) => {
-                            return (
-                              parseInt(a?.id) ===
-                              parseInt(props?.session?.personal?.id)
-                            );
-                          })?.attempt || 0
-                        )}%`}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="relative h-2 mb-4 text-xs flex rounded bg-blue-200">
-                    {props?.players
-                      ?.filter((a, b) => {
-                        return a?.isInLobby;
-                      })
-                      ?.map((play, index) => {
-                        return (
-                          <PROGRESS_LINE
-                            key={play?.id}
-                            name={play?.username}
-                            width={evaluateProgress(play?.attempt)}
-                            index={index}
-                            isMe={
-                              play?.isGuest
-                                ? play?.username === props?.isGuest?.username
-                                : parseInt(play?.id) ===
-                                  parseInt(props?.session?.personal?.id)
-                            }
-                          />
-                        );
-                      })}
-                  </div>
-                </div>
-              </div>
             </>
           )}
         </div>

@@ -252,8 +252,8 @@ export default function Lobby() {
   }
 
   return (
-    <div className="mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
-      <div className="mb-5 flex flex-col w-full">
+    <div className="mt-10 xl:mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
+      <div className="mb-0 xl:mb-5 flex flex-col w-full">
         <h1 className="flex flex-col md:flex-row items-center justify-center text-3xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4">
           Room
           <span className="leading-tighter tracking-tighter text-_accent_1_">
