@@ -55,6 +55,7 @@ export default function Home() {
 
   const [customPresets, setCustomPresets] = useState([]);
 
+  // API start
   const fetchCustomPresets = async (post_select = null) => {
     await axios
       .get(
@@ -186,10 +187,118 @@ export default function Home() {
         console.log(error);
       });
   };
+  // API end
+  // Local start
+  const fetchGuestCustomPresets = (post_select = null) => {
+    const storedPresets =
+      JSON.parse(localStorage.getItem("customPresets")) || [];
+    setCustomPresets(storedPresets);
+
+    setModal({
+      ...modal,
+      presetName: `Custom Preset ${storedPresets.length + 1}`,
+      open: false,
+    });
+
+    if (post_select) {
+      const presetObject = storedPresets.find(
+        (preset) => preset.name === post_select
+      );
+      setSelection({
+        ...selection,
+        customPreset: presetObject ? presetObject.id : "",
+      });
+    } else {
+      setSelection({
+        ...selection,
+        customPreset: "",
+      });
+    }
+  };
+
+  const addGuestCustomPresets = () => {
+    const storedPresets =
+      JSON.parse(localStorage.getItem("customPresets")) || [];
+    const finalData = {
+      id: storedPresets.length,
+      name: modal?.presetName,
+      tenses: selection?.tenses?.map((a) => a?.id),
+      regularVerbs: selection?.regularVerbs?.map((a) => a?.id),
+      irregularVerbs: selection?.irregularVerbs?.map((a) => a?.id),
+    };
+
+    storedPresets.push(finalData);
+    localStorage.setItem("customPresets", JSON.stringify(storedPresets));
+
+    setModal({
+      ...modal,
+      open: false,
+    });
+    setIsStartMenuOpen(false);
+    setToast({
+      open: true,
+      success: true,
+      message: "Preset added successfully!",
+    });
+    fetchGuestCustomPresets(modal?.presetName);
+  };
+
+  const updateGuestCustomPresets = () => {
+    const storedPresets =
+      JSON.parse(localStorage.getItem("customPresets")) || [];
+    const finalData = {
+      id: parseInt(selection?.customPreset),
+      name: modal?.presetName,
+      tenses: selection?.tenses?.map((a) => a?.id),
+      regularVerbs: selection?.regularVerbs?.map((a) => a?.id),
+      irregularVerbs: selection?.irregularVerbs?.map((a) => a?.id),
+    };
+
+    const updatedPresets = storedPresets.map((preset) =>
+      parseInt(preset.id) === parseInt(selection?.customPreset)
+        ? { ...preset, ...finalData }
+        : preset
+    );
+
+    localStorage.setItem("customPresets", JSON.stringify(updatedPresets));
+
+    setModal({
+      ...modal,
+      open: false,
+    });
+    setIsStartMenuOpen(false);
+    setToast({
+      open: true,
+      success: true,
+      message: "Preset updated successfully!",
+    });
+    fetchGuestCustomPresets(modal?.presetName);
+  };
+
+  const deleteGuestCustomPreset = () => {
+    const storedPresets =
+      JSON.parse(localStorage.getItem("customPresets")) || [];
+    const updatedPresets = storedPresets.filter(
+      (preset) => parseInt(preset.id) !== parseInt(selection?.customPreset)
+    );
+
+    localStorage.setItem("customPresets", JSON.stringify(updatedPresets));
+
+    setIsStartMenuOpen(false);
+    setToast({
+      open: true,
+      success: true,
+      message: "Preset deleted successfully!",
+    });
+    fetchGuestCustomPresets();
+  };
+  // Local end
 
   useEffect(() => {
     if (session?.isLoaded && session?.isLoggedIn) {
       fetchCustomPresets();
+    } else if (session?.isLoaded && !session?.isLoggedIn) {
+      fetchGuestCustomPresets();
     }
   }, [session]);
   const [code, setCode] = useState("");
@@ -264,6 +373,8 @@ export default function Home() {
 
   // End of Functions
 
+  const [login, setLogin] = useState(false);
+
   if (isAssessment) {
     return (
       <Assessment
@@ -322,9 +433,17 @@ export default function Home() {
               width="w-fit"
               onClick={() => {
                 if (!modal.update) {
-                  addCustomPresets();
+                  if (session?.isLoggedIn) {
+                    addCustomPresets();
+                  } else {
+                    addGuestCustomPresets();
+                  }
                 } else {
-                  updateCustomPresets();
+                  if (session?.isLoggedIn) {
+                    updateCustomPresets();
+                  } else {
+                    updateGuestCustomPresets();
+                  }
                 }
               }}
               disabled={modal.presetName === ""}
@@ -333,20 +452,52 @@ export default function Home() {
           <div className="mt-2" id="error" style={{ display: "none" }}></div>
         </div>
       </ModalWrapper>
-      <div className="mt-10 xl:mt-12 mb-10 flex flex-col md:flex-col justify-center items-center">
+      <ModalWrapper
+        isOpen={login}
+        onClose={() => {
+          setLogin(false);
+        }}
+      >
+        <div>
+          <h1 className="text-left text-xl font-extrabold leading-tight tracking-tight">
+            <span className="leading-tighter tracking-tighter bg-clip-text text-black">
+              {prepareLanguageText(
+                "Please log in to create a multiplayer lobby.",
+                "Veuillez vous connecter pour créer un salon multijoueur."
+              )}
+            </span>
+          </h1>
+          <div className="flex flex-row w-full space-x-3 mt-5">
+            <CustomButton
+              label={prepareLanguageText("Cancel", "Annuler")}
+              padding="px-5"
+              width="w-fit"
+              onClick={() => {
+                setLogin(false);
+              }}
+            />
+            <CustomButton
+              label={prepareLanguageText("Login", "Connexion")}
+              padding="px-5"
+              width="w-fit"
+              onClick={() => {
+                navigate("/login");
+              }}
+            />
+          </div>
+        </div>
+      </ModalWrapper>
+      <div className="mt-6 xl:mt-10 flex flex-col md:flex-col justify-center items-center">
         <div className="mb-0 xl:mb-0 flex flex-col w-full">
-          <h1 className="text-center text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold leading-tight tracking-tight mb-4">
+          <h1 className="text-center text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold leading-tight tracking-tight mb-0 xl:mb-4">
             {prepareLanguageText("Master", "Pratiquez les")}
             <span className="leading-tighter tracking-tighter ml-2 text-_accent_1_">
-              {prepareLanguageText(
-                "French Conjugations",
-                "Conjugaisons"
-              )}
+              {prepareLanguageText("French Conjugations", "Conjugaisons")}
             </span>
           </h1>
         </div>
         <div className="flex flex-col justify-center items-center w-full">
-          <div className="px-5 md:px-0 md:w-full lg:w-3/4 xl:w-2/3 w-full flex flex-col md:flex-row md:space-x-10">
+          <div className="px-5 md:px-0 md:w-full lg:w-3/4 xl:w-2/3 w-full flex flex-col md:flex-row md:space-x-5">
             <MultipleSelect
               mainLabel={prepareLanguageText("tenses", "Temps")}
               label="Ex. Imparfait"
@@ -405,46 +556,43 @@ export default function Home() {
               onChange={changeSelection}
               name="irregularVerbs"
             />
-            {session?.isLoggedIn && (
-              <div className={`mt-3 w-full`}>
-                <span className="capitalize whitespace-nowrap text-base font-semibold text-slate-500 tracking-tighter leading-relaxed">
-                  {prepareLanguageText(
-                    "Custom Presets",
-                    "Préléglases"
-                  )}
-                </span>
-                <select
-                  placeholder={prepareLanguageText(
-                    "Select custom preset",
-                    "Sélectionnez un préréglage personnalisé"
-                  )}
-                  defaultValue={selection?.customPreset}
-                  onChange={(e) => {
-                    changeSelectionViaPreset(e.target.value);
-                  }}
-                  className={`${
-                    !selection?.customPreset ? "text-[#aaa]" : "text-black"
-                  } w-full h-[40px] bg-white transition-all duration-300 ease-in-out rounded-[4px] focus:outline-none outline-none border border-[#ccc] ring-0 focus:ring-0`}
-                >
-                  {
-                    <option className="text-black" value={""}>
-                      {prepareLanguageText(
-                        "Select custom preset",
-                        "Sélectionnez un préréglage personnalisé"
-                      )}
-                    </option>
-                  }
-                  {customPresets.length > 1 &&
-                    customPresets.map((a, b) => {
-                      return (
-                        <option className="text-black" key={b} value={a.id}>
-                          {a.name}
-                        </option>
-                      );
-                    })}
-                </select>
-              </div>
-            )}
+            {/* {session?.isLoggedIn && ( */}
+            <div className={`mt-3 w-full md:w-1/4`}>
+              <span className="capitalize whitespace-nowrap text-base font-semibold text-slate-500 tracking-tighter leading-relaxed">
+                {prepareLanguageText("Custom Presets", "Préléglases")}
+              </span>
+              <select
+                placeholder={prepareLanguageText(
+                  "Select custom preset",
+                  "Sélectionnez un préréglage personnalisé"
+                )}
+                defaultValue={selection?.customPreset}
+                onChange={(e) => {
+                  changeSelectionViaPreset(e.target.value);
+                }}
+                className={`${
+                  !selection?.customPreset ? "text-[#aaa]" : "text-black"
+                } w-full h-[40px] bg-white transition-all duration-300 ease-in-out rounded-[4px] focus:outline-none outline-none border border-[#ccc] ring-0 focus:ring-0`}
+              >
+                {
+                  <option className="text-black" value={""}>
+                    {prepareLanguageText(
+                      "Select custom preset",
+                      "Sélectionnez un préréglage personnalisé"
+                    )}
+                  </option>
+                }
+                {customPresets.length > 0 &&
+                  customPresets.map((a, b) => {
+                    return (
+                      <option className="text-black" key={b} value={a.id}>
+                        {a.name}
+                      </option>
+                    );
+                  })}
+              </select>
+            </div>
+            {/* )} */}
           </div>{" "}
           <div className="mt-10 relative flex justify-center items-center space-x-5">
             <div className="flex flex-row">
@@ -557,7 +705,11 @@ export default function Home() {
                     </li>
                     <li
                       onClick={() => {
-                        deleteCustomPreset();
+                        if (session?.isLoggedIn) {
+                          deleteCustomPreset();
+                        } else {
+                          deleteGuestCustomPreset();
+                        }
                       }}
                     >
                       <div className="cursor-pointer flex p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
@@ -586,18 +738,24 @@ export default function Home() {
                 )}
               </ul>
             </div>
-            {session?.isLoggedIn && (
-              <CustomButton
-                label="Multiplayer"
-                icon={<GiThreeFriends color="white" />}
-                onClick={createRoom}
-                disabled={
-                  selection.tenses.length <= 0 ||
-                  (selection.regularVerbs.length <= 0 &&
-                    selection.irregularVerbs.length <= 0)
+            {/* {session?.isLoggedIn && ( */}
+            <CustomButton
+              label="Multiplayer"
+              icon={<GiThreeFriends color="white" />}
+              onClick={() => {
+                if (session?.isLoggedIn) {
+                  createRoom();
+                } else {
+                  setLogin(true);
                 }
-              />
-            )}
+              }}
+              disabled={
+                selection.tenses.length <= 0 ||
+                (selection.regularVerbs.length <= 0 &&
+                  selection.irregularVerbs.length <= 0)
+              }
+            />
+            {/* )} */}
           </div>
         </div>
         <hr className="md:w-2/4 w-full h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700" />
