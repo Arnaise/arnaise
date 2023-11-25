@@ -75,6 +75,8 @@ export default function QuestionTab(props) {
 
   // Testing End
 
+  const [shake, setShake] = useState(false);
+
   const checkAnswer = (e) => {
     e.preventDefault();
     setReady(false);
@@ -87,11 +89,12 @@ export default function QuestionTab(props) {
     let isCorrect = true;
     if (trueValue.toLowerCase() === answer.toLowerCase()) {
       addLog(trueValue, true);
-      setMessage("Correct!", "green-500");
+      // setMessage("Correct!", "green-500");
     } else {
       isCorrect = false;
       addLog(trueValue, false);
-      setMessage(prepareLanguageText("Wrong!", "Faux!"), "red-500");
+      // setMessage(prepareLanguageText("Wrong!", "Faux!"), "red-500");
+      setShake(true);
     }
     if (isCorrect) {
       setAnswer("");
@@ -100,7 +103,8 @@ export default function QuestionTab(props) {
       props?.setLoading(false);
     }
     setTimeout(() => {
-      resetMessage();
+      // resetMessage();
+      setShake(false);
       setReady(true);
     }, 1000);
   };
@@ -135,7 +139,11 @@ export default function QuestionTab(props) {
   const [answer, setAnswer] = useState("");
 
   return (
-    <div className="relative py-[4rem] px-5 md:px-[6rem] lg:px-[8rem] xl:px-[10rem] bg-white shadow-2xl rounded-lg">
+    <div
+      className={`${
+        shake ? "make-me-shake" : "stop-the-shake"
+      } relative py-[4rem] px-5 md:px-[6rem] lg:px-[8rem] xl:px-[10rem] bg-white shadow-2xl rounded-lg`}
+    >
       <div
         onClick={props?.backToHome}
         className="group transition-all duration-300 ease-in-out cursor-pointer flex flex-row justify-center items-center space-x-1 absolute top-[10px] left-[10px] hover:bg-gray-200 rounded-full p-3"
@@ -203,6 +211,7 @@ export default function QuestionTab(props) {
             <CustomButton
               label={prepareLanguageText("Next", "Suivante")}
               padding="mx-4"
+              className={`${shake ? "make-me-shake" : "stop-the-shake"}`}
               icon={<TbPlayerTrackNext color="white" />}
               onClick={checkAnswer}
               disabled={answer === "" || !ready}

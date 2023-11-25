@@ -70,6 +70,8 @@ export default function QuestionTab(props) {
 
   // Testing End
 
+  const [shake, setShake] = useState(false);
+
   const checkAnswer = (e) => {
     e.preventDefault();
     setReady(false);
@@ -81,10 +83,11 @@ export default function QuestionTab(props) {
     );
     let isCorrect = true;
     if (trueValue.toLowerCase() === answer.toLowerCase()) {
-      setMessage("Correct!", "green-500");
+      // setMessage("Correct!", "green-500");
     } else {
       isCorrect = false;
-      setMessage("Wrong!", "red-500");
+      // setMessage("Wrong!", "red-500");
+      setShake(true);
     }
     if (isCorrect) {
       sendProgress();
@@ -96,7 +99,8 @@ export default function QuestionTab(props) {
       props?.setLoading(false);
     }
     setTimeout(() => {
-      resetMessage();
+      // resetMessage();
+      setShake(false);
       setReady(true);
     }, 1000);
   };
@@ -174,6 +178,7 @@ export default function QuestionTab(props) {
               <CustomButton
                 label={prepareLanguageText("Next", "Suivante")}
                 onClick={checkAnswer}
+                className={`${shake ? "make-me-shake" : "stop-the-shake"}`}
                 padding="mx-4"
                 icon={<TbPlayerTrackNext color="white" />}
                 disabled={answer === "" || !ready}

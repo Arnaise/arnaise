@@ -333,14 +333,14 @@ export default function Home() {
           <div className="mt-2" id="error" style={{ display: "none" }}></div>
         </div>
       </ModalWrapper>
-      <div className="mt-10 xl:mt-20 mb-10 flex flex-col md:flex-col justify-center items-center">
-        <div className="mb-0 xl:mb-0 xl:mb-5 flex flex-col w-full">
-          <h1 className="text-center text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight tracking-tight mb-4">
+      <div className="mt-10 xl:mt-12 mb-10 flex flex-col md:flex-col justify-center items-center">
+        <div className="mb-0 xl:mb-0 flex flex-col w-full">
+          <h1 className="text-center text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold leading-tight tracking-tight mb-4">
             {prepareLanguageText("Master", "Pratiquez les")}
             <span className="leading-tighter tracking-tighter ml-2 text-_accent_1_">
               {prepareLanguageText(
                 "French Conjugations",
-                "conjugaisons"
+                "Conjugaisons"
               )}
             </span>
           </h1>
@@ -602,7 +602,7 @@ export default function Home() {
         </div>
         <hr className="md:w-2/4 w-full h-1 mx-auto my-4 bg-gray-100 border-0 rounded md:my-10 dark:bg-gray-700" />
         <section className="mb-10 w-full">
-          <h1 className="text-center text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight tracking-tight mb-4">
+          <h1 className="text-center text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-extrabold leading-tight tracking-tight mb-4">
             {prepareLanguageText("Join", "Rejoindre le")}
             <span className="leading-tighter ml-2 tracking-tighter text-_accent_1_">
               Lobby

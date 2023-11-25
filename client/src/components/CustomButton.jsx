@@ -36,7 +36,7 @@ export default function CustomButton(props) {
           return !old;
         });
       }}
-      className={`${props?.radius || "rounded-lg"} ${
+      className={`${props?.className} ${props?.radius || "rounded-lg"} ${
         props?.width || "w-full"
       } ${
         isLoading ||
