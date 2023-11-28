@@ -12,7 +12,7 @@ import {
 } from "../CONSTANT";
 import Assessment from "./Assessment";
 import { formatSelections, makeConjugationQuestions } from "../UTILS";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { VscDebugStart } from "react-icons/vsc";
 import { SlOptionsVertical } from "react-icons/sl";
@@ -23,10 +23,21 @@ import { RiDeleteBin2Line } from "react-icons/ri";
 import InputBox from "../components/InputBox";
 
 export default function Home() {
+  const [searchParams, setSearchParams] = useSearchParams();
   let navigate = useNavigate();
   const { session, setSession, options, updatePoints, setToast } =
     useContext(UserData);
   // min-h-[calc(100vh-4rem)]
+
+  useEffect(() => {
+    if (searchParams.get("lobby")) {
+      setToast({
+        open: true,
+        success: false,
+        message: "No such lobby found!",
+      });
+    }
+  }, [searchParams]);
 
   const [isStartMenuOpen, setIsStartMenuOpen] = useState(false);
 
@@ -463,7 +474,7 @@ export default function Home() {
             <span className="leading-tighter tracking-tighter bg-clip-text text-black">
               {prepareLanguageText(
                 "Please log in to create a multiplayer lobby.",
-                "Veuillez vous connecter pour créer un salon multijoueur."
+                "Veuillez vous connecter pour créer un lobby ‘Multiplayer’."
               )}
             </span>
           </h1>

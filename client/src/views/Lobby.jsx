@@ -340,7 +340,11 @@ export default function Lobby() {
       })
       .then((responce) => {
         if (responce?.data?.error) {
-          navigate(`/multiplayer?lobby=unknown`);
+          if (session?.isLoggedIn) {
+            navigate(`/multiplayer?lobby=unknown`);
+          } else {
+            navigate(`/?lobby=unknown`);
+          }
         } else {
           setRoom(responce.data);
         }
